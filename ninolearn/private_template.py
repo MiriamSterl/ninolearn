@@ -3,6 +3,6 @@ CMEMS_username = ''
 CMEMS_password = ''
 
 # directories
-datadir = "" # full path to the directory where you want to save data
-plotdir = "" # full path to the directory where you want to save plots
-basedir = "" # full path to the directory root directory of the ninolearn packacge
+datadir = "C:/Users/miria/Documents/Studie/Ninolearn/Data" # full path to the directory where you want to save data
+plotdir = "C:/Users/miria/Documents/Studie/Ninolearn/Plots" # full path to the directory where you want to save plots
+basedir = "C:/Users/miria/Documents/Studie/Ninolearn/ninolearn" # full path to the directory root directory of the ninolearn packacge
