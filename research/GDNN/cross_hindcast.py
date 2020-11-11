@@ -64,7 +64,7 @@ data=data.assign({'std_estimate':(('target_season', 'lead'),std_estimate)})
 data.to_netcdf(join(processeddir, f'{model_name}_forecasts_with_std_estimated.nc'))
 data.close()
 #%% =============================================================================
-# Invertval propabilities
+# Invertval probabilities
 # =============================================================================
 data = xr.open_dataset((join(processeddir, f'{model_name}_forecasts_with_std_estimated.nc')))
 
@@ -145,7 +145,7 @@ plt.xlabel('Quantile')
 plt.tight_layout()
 
 #%% =============================================================================
-# Reliabilty diagramm
+# Reliabilty diagram
 # =============================================================================
 
 std_levels =[-1.959964, -0.994458, 0., 0.994458, 1.959964]

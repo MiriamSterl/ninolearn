@@ -1,5 +1,5 @@
 """
-The downloaded data needed to be prepared to have the similiar time-axis.
+The downloaded data needed to be prepared to have the similar time-axis.
 
 All spatial data is regridded to the 2.5x2.5 grid of the NCEP
 reanalysis data.
@@ -17,7 +17,7 @@ from ninolearn.preprocess.prepare import calc_warm_pool_edge, prep_other_forecas
 print_header("Prepare Data")
 
 # =============================================================================
-# Prepare the incedes
+# Prepare the indices
 # =============================================================================
 prep_oni()
 prep_nino_month(index="3.4")
