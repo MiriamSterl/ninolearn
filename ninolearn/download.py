@@ -9,6 +9,8 @@ from os.path import isfile, join, exists
 from os import remove, mkdir
 import gzip
 import shutil
+import sys  
+sys.path.append('C:/Users/miria/Documents/Studie/Ninolearn/ninolearn/')
 
 from ninolearn.pathes import rawdir, basedir
 
@@ -319,7 +321,7 @@ class sources(object):
 
     otherForecasts = {
             'downloadType':'http',
-            'url': 'https://iri.columbia.edu/~forecast/ensofcst/Data/ensofcst_ALLto0719',
+            'url': 'https://iri.columbia.edu/~forecast/ensofcst/Data/ensofcst_ALLto1120', # TODO: this can change!!
             'filename': 'other_forecasts.csv'
 
             }

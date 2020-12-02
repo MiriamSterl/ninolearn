@@ -143,6 +143,7 @@ def prep_K_index():
     """
     function that edits the Kirimati index from Bunge and Clarke (2014)
     """
+    print(f"Prepare K index.")
     data = read_raw.K_index()
     data.index.name = 'time'
     data.name = 'anom'
@@ -153,8 +154,8 @@ def prep_wwv_proxy():
     Make a wwv proxy index that uses the K-index from Bunge and Clarke (2014)
     for the time period between 1955 and 1979
     """
-
-    reader_wwv = data_reader(startdate='1980-01', enddate='2018-12')
+    print(f"Prepare WWV proxy.")
+    reader_wwv = data_reader(startdate='1980-01', enddate='2020-11') # enddate was: 2018-12
     wwv = reader_wwv.read_csv('wwv')
 
     reader_kindex = data_reader(startdate='1955-01', enddate='1979-12')
@@ -172,9 +173,9 @@ def prep_iod():
 
     data = read_raw.iod()
     data = data.T.unstack()
-    data = data.replace(-999, np.nan)
+    data = data.replace(-9999, np.nan)
 
-    dti = pd.date_range(start='1870-01-01', end='2018-12-01', freq='MS')
+    dti = pd.date_range(start='1870-01-01', end='2020-12-01', freq='MS')
 
     df = pd.DataFrame(data=data.values,index=dti, columns=['anom'])
     df.index.name = 'time'
@@ -185,10 +186,10 @@ def calc_warm_pool_edge():
     """
     calculate the warm pool edge
     """
-    reader = data_reader(startdate='1948-01', enddate='2018-12',lon_min=120, lon_max=290)
+    reader = data_reader(startdate='1948-01', enddate='2020-10',lon_min=120, lon_max=290) # enddate: was 2018-12
     sst = reader.read_netcdf('sst', dataset='ERSSTv5', processed='')
 
-    sst_eq = sst.loc[dict(lat=0)]
+    sst_eq = sst.loc[dict(latitude=0)]
     warm_pool_edge = np.zeros(sst_eq.shape[0])
     indeces = np.zeros(sst_eq.shape[0])
 
@@ -207,7 +208,7 @@ def calc_warm_pool_edge():
     df.index.name = 'time'
 
     df.to_csv(join(processeddir, 'wp_edge.csv'))
-    return warm_pool_edge, indeces
+    #return warm_pool_edge, indeces
 
 
 def prep_other_forecasts():

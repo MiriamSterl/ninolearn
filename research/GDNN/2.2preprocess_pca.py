@@ -1,3 +1,5 @@
+import sys  
+sys.path.append('C:/Users/miria/Documents/Studie/Ninolearn/ninolearn/')
 from ninolearn.preprocess.pca import pca
 from ninolearn.IO.read_processed import data_reader
 import matplotlib.pyplot as plt
@@ -5,7 +7,7 @@ from scipy.signal import detrend
 plt.close("all")
 
 # =============================================================================
-# Decadel PCAs
+# decadal PCAs
 # =============================================================================
 
 
@@ -13,13 +15,13 @@ reader = data_reader(startdate='1955-01', enddate='2018-12',lon_min=120, lon_max
 sst = reader.read_netcdf('sst', dataset='ERSSTv5', processed='anom')
 
 #%%
-sst_decadel = sst.rolling(time=60, center=False).mean()
-sst_decadel.attrs = sst.attrs.copy()
-sst_decadel.name = f'dec_{sst.name}'
+sst_decadal = sst.rolling(time=60, center=False).mean()
+sst_decadal.attrs = sst.attrs.copy()
+sst_decadal.name = f'dec_{sst.name}'
 
-pca_sst_decadel = pca(n_components=6)
+pca_sst_decadal = pca(n_components=6)
 
-pca_sst_decadel.set_eof_array(sst_decadel)
-pca_sst_decadel.compute_pca()
-pca_sst_decadel.plot_eof()
-pca_sst_decadel.save(extension='.csv', filename='dec_sst_ERSSTv5_anom')
+pca_sst_decadal.set_eof_array(sst_decadal)
+pca_sst_decadal.compute_pca()
+pca_sst_decadal.plot_eof()
+pca_sst_decadal.save(extension='.csv', filename='dec_sst_ERSSTv5_anom')

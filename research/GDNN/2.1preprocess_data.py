@@ -8,6 +8,8 @@ Some variables are computed, i.e the wind stress field, the wind speed and
 the warm pool edge.
 """
 import numpy as np
+import sys  
+sys.path.append('C:/Users/miria/Documents/Studie/Ninolearn/ninolearn/')
 
 from ninolearn.utils import print_header
 from ninolearn.preprocess.prepare import prep_oni, prep_nino_month, prep_wwv
@@ -34,7 +36,7 @@ prep_wwv_proxy()
 # Prepare the gridded data
 # =============================================================================
 from ninolearn.IO import read_raw
-from ninolearn.preprocess.anomaly import postprocess, saveAnomaly
+from ninolearn.preprocess.anomaly import postprocess
 from ninolearn.preprocess.regrid import to2_5x2_5
 
 # postprocess sst data from ERSSTv5
@@ -88,7 +90,7 @@ postprocess(tauy)
 # =============================================================================
 # Postprocessing based on already postprocessd data
 # =============================================================================
-calc_warm_pool_edge()
+calc_warm_pool_edge() # PROBLEM
 
 # =============================================================================
 # Prepare the other forecasts

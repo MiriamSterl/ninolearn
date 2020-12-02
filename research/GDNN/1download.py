@@ -1,13 +1,14 @@
 """
 The following script downloads all data that was relevant for my master thesis.
 """
+import sys  
+sys.path.append('C:/Users/miria/Documents/Studie/Ninolearn/ninolearn/')
 
 from ninolearn.download import download, sources
 from ninolearn.utils import print_header
 
 print_header("Download Data")
 
-#%%
 # =============================================================================
 # Single files
 # =============================================================================
@@ -21,6 +22,7 @@ download(sources.WWV_West)
 download(sources.UWIND_NCEP)
 download(sources.VWIND_NCEP)
 download(sources.otherForecasts)
+download(sources.KINDEX)
 
 # =============================================================================
 # Multiple files
