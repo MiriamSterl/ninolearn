@@ -1,13 +1,13 @@
 import numpy as np
 
-import keras.backend as K
-from keras.activations import elu
-from keras.models import Model, save_model, load_model
-from keras.layers import Dense, Input, concatenate
-from keras.layers import Dropout, GaussianNoise
-from keras.optimizers import Adam, RMSprop
-from keras.callbacks import EarlyStopping
-from keras import regularizers
+import tensorflow.keras.backend as K
+from tensorflow.keras.activations import elu
+from tensorflow.keras.models import Model, save_model, load_model
+from tensorflow.keras.layers import Dense, Input, concatenate
+from tensorflow.keras.layers import Dropout, GaussianNoise
+from tensorflow.keras.optimizers import Adam, RMSprop
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras import regularizers
 
 from os.path import join, exists
 from os import mkdir, listdir, getcwd
