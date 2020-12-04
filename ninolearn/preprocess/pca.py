@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from os.path import join
 from sklearn.decomposition.pca import PCA
-from mpl_toolkits.basemap import Basemap
+#from mpl_toolkits.basemap import Basemap
 from matplotlib import cm
 from scipy.signal import detrend
 
@@ -73,11 +73,11 @@ class pca(PCA):
 
     def set_eof_array(self, data):
         """
-        Genrates the array that will be analyzed with the EOF.
+        Generates the array that will be analyzed with the EOF.
         """
         self.time = data['time']
-        self.lon = data['lon']
-        self.lat = data['lat']
+        self.lon = data['longitude']
+        self.lat = data['latitude']
 
         EOFarr = np.array(data[:, :, :])
 
@@ -153,6 +153,7 @@ class pca(PCA):
         for i in range(0, 2):
             fig.add_subplot(221+i)
             plt.title("EOF"+str(i+1))
+            # TODO: Basemap no longer works --> can now be done with cartopy
             m = Basemap(projection='robin', lon_0=-180, resolution='c')
             x, y = m(lon2, lat2)
 

@@ -284,8 +284,8 @@ class networkMetricsSeries(object):
 
         dims = data.coords.dims
         time_index = dims.index('time')
-        lat_index = dims.index('lat')
-        lon_index = dims.index('lon')
+        lat_index = dims.index('latitude')
+        lon_index = dims.index('longitude')
 
         len_time = data3Darr.shape[time_index]
         len_lat = data3Darr.shape[lat_index]

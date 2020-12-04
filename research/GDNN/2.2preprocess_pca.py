@@ -23,5 +23,5 @@ pca_sst_decadal = pca(n_components=6)
 
 pca_sst_decadal.set_eof_array(sst_decadal)
 pca_sst_decadal.compute_pca()
-pca_sst_decadal.plot_eof()
+#pca_sst_decadal.plot_eof()
 pca_sst_decadal.save(extension='.csv', filename='dec_sst_ERSSTv5_anom')
