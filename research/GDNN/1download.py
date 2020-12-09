@@ -1,8 +1,10 @@
 """
 The following script downloads all data that is used to train the models.
 """
+from start import filedir
+
 import sys  
-sys.path.append('C:/Users/miria/Documents/Studie/Ninolearn project/ninolearn/')
+sys.path.append(filedir)
 
 from ninolearn.download import download, sources
 from ninolearn.utils import print_header
@@ -22,7 +24,7 @@ download(sources.WWV)
 download(sources.UWIND_NCEP)
 download(sources.VWIND_NCEP)
 #download(sources.otherForecasts)
-#download(sources.KINDEX)
+download(sources.KINDEX)
 
 # =============================================================================
 # Multiple files

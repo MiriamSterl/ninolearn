@@ -29,8 +29,8 @@ prep_oni()
 prep_wwv()
 #prep_wwv(cardinal_direction="west")
 prep_iod()
-#prep_K_index()
-#prep_wwv_proxy()
+prep_K_index()
+prep_wwv_proxy()
 
 # =============================================================================
 # Prepare the gridded data
