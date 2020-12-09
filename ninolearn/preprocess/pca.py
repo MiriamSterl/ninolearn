@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from os.path import join
-from sklearn.decomposition.pca import PCA
+from sklearn.decomposition import PCA
 #from mpl_toolkits.basemap import Basemap
 from matplotlib import cm
 from scipy.signal import detrend
