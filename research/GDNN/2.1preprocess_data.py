@@ -8,13 +8,9 @@ Some variables are computed, i.e the wind stress field, the wind speed and
 the warm pool edge.
 """
 import numpy as np
-import sys  
-sys.path.append('C:/Users/miria/Documents/Studie/Ninolearn project/ninolearn/')
-
 from ninolearn.utils import print_header
-from ninolearn.preprocess.prepare import prep_oni, prep_nino_month, prep_wwv
+from ninolearn.preprocess.prepare import prep_oni, prep_wwv
 from ninolearn.preprocess.prepare import prep_iod, prep_K_index, prep_wwv_proxy
-from ninolearn.preprocess.prepare import calc_warm_pool_edge, prep_other_forecasts
 
 print_header("Prepare Data")
 
@@ -22,12 +18,7 @@ print_header("Prepare Data")
 # Prepare the indices
 # =============================================================================
 prep_oni()
-#prep_nino_month(index="3.4")
-#prep_nino_month(index="3")
-#prep_nino_month(index="1+2")
-#prep_nino_month(index="4")
 prep_wwv()
-#prep_wwv(cardinal_direction="west")
 prep_iod()
 prep_K_index()
 prep_wwv_proxy()
@@ -56,11 +47,6 @@ ssh_oras4 = read_raw.oras4()
 ssh_oras4_regrid = to2_5x2_5(ssh_oras4)
 postprocess(ssh_oras4_regrid)
 
-# OLR
-# olr_ncar = read_raw.olr()
-# olr_ncar_regrid = to2_5x2_5(olr_ncar)
-# postprocess(olr_ncar_regrid)
-
 # =============================================================================
 # Calculate some variables
 # =============================================================================
@@ -78,21 +64,3 @@ taux.attrs['long_name'] = 'Monthly Mean Zonal Wind Stress at sigma level 0.995'
 taux.attrs['var_desc'] = 'x-wind-stress'
 taux.attrs['units'] = 'm^2/s^2'
 postprocess(taux)
-
-# tauy = vwind * wspd
-# tauy.attrs = uwind.attrs.copy()
-# tauy.name = 'tauy'
-# tauy.attrs['long_name'] = 'Monthly Mean Meridional Wind Stress at sigma level 0.995'
-# tauy.attrs['var_desc'] = 'y-wind-stress'
-# tauy.attrs['units'] = 'm^2/s^2'
-# postprocess(tauy)
-
-# =============================================================================
-# Postprocessing based on already postprocessd data
-# =============================================================================
-# calc_warm_pool_edge()
-
-# =============================================================================
-# Prepare the other forecasts
-# =============================================================================
-# prep_other_forecasts()

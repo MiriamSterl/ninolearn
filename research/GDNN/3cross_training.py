@@ -26,7 +26,7 @@ def pipeline(lead_time,  return_persistance=False):
     """
     reader = data_reader(startdate='1960-01', enddate='2017-12')
 
-     # indeces
+    # indices
     oni = reader.read_csv('oni')
 
     iod = reader.read_csv('iod')
@@ -39,7 +39,7 @@ def pipeline(lead_time,  return_persistance=False):
     network_ssh = reader.read_statistic('network_metrics', variable='zos', dataset='ORAS4', processed="anom")
     H_ssh = network_ssh['corrected_hamming_distance']
 
-    #wind stress
+    # wind stress
     taux = reader.read_netcdf('taux', dataset='NCEP', processed='anom')
 
     taux_WP = taux.loc[dict(lat=slice(2.5,-2.5), lon=slice(120, 160))]

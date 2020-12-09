@@ -1,14 +1,9 @@
-import sys  
-sys.path.append('C:/Users/miria/Documents/Studie/Ninolearn project/ninolearn/')
 from ninolearn.preprocess.pca import pca
 from ninolearn.IO.read_processed import data_reader
-import matplotlib.pyplot as plt
-plt.close("all")
 
 # =============================================================================
 # decadal PCAs
 # =============================================================================
-
 
 reader = data_reader(startdate='1955-01', enddate='2018-12',lon_min=120, lon_max=300)
 sst = reader.read_netcdf('sst', dataset='ERSSTv5', processed='anom')

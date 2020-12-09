@@ -105,7 +105,7 @@ class baseModel(object):
                 self.history_hyp[key].append(self.hyperparameters[key])
 
             self.df_history_hyp = pd.DataFrame(dict(self.history_hyp))
-            self.df_history_hyp.to_csv('hyperparameter_history.csv')
+            #self.df_history_hyp.to_csv('hyperparameter_history.csv')
 
             # check if validation score was enhanced
             if self.mean_val_loss<best_loss:

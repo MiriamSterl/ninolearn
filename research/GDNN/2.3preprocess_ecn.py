@@ -1,5 +1,3 @@
-import sys  
-sys.path.append('C:/Users/miria/Documents/Studie/Ninolearn project/ninolearn/')
 from ninolearn.utils import print_header
 from ninolearn.preprocess.network import networkMetricsSeries
 

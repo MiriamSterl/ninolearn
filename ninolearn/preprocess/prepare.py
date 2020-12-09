@@ -208,7 +208,6 @@ def calc_warm_pool_edge():
     df.index.name = 'time'
 
     df.to_csv(join(processeddir, 'wp_edge.csv'))
-    #return warm_pool_edge, indeces
 
 
 def prep_other_forecasts():
