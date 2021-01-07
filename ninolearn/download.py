@@ -230,17 +230,17 @@ class sources(object):
            'filename': 'oni.txt'
             }
 
-    NINO34detrend = {
-            'downloadType':'http',
-            'url': 'https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/ensostuff/detrend.nino34.ascii.txt',
-            'filename': 'nino34detrend.txt'
-            }
+    # NINO34detrend = {
+    #         'downloadType':'http',
+    #         'url': 'https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/ensostuff/detrend.nino34.ascii.txt',
+    #         'filename': 'nino34detrend.txt'
+    #         }
 
-    NINOindices = {
-            'downloadType':'http',
-            'url': 'https://www.cpc.ncep.noaa.gov/data/indices/ersst5.nino.mth.81-10.ascii',
-            'filename': 'nino_1_4.txt'
-            }
+    # NINOindices = {
+    #         'downloadType':'http',
+    #         'url': 'https://www.cpc.ncep.noaa.gov/data/indices/ersst5.nino.mth.81-10.ascii',
+    #         'filename': 'nino_1_4.txt'
+    #         }
 
 
     ORAS4 = {
@@ -250,12 +250,12 @@ class sources(object):
             'location': '/EASYInit/ORA-S4/monthly_1x1/'
                   }
 
-    GODAS = {
-            'downloadType':'ftp',
-            'filename': 'sshg.1980.nc',
-            'host': 'ftp.cdc.noaa.gov',
-            'location': '/Datasets/godas/'
-                  }
+    # GODAS = {
+    #         'downloadType':'ftp',
+    #         'filename': 'sshg.1980.nc',
+    #         'host': 'ftp.cdc.noaa.gov',
+    #         'location': '/Datasets/godas/'
+    #               }
 
     WWV = {
             'downloadType':'http',
@@ -263,11 +263,11 @@ class sources(object):
             'url': 'https://www.pmel.noaa.gov/tao/wwv/data/wwv.dat'
             }
 
-    WWV_West = {
-            'downloadType':'http',
-            'filename': 'wwv_west.dat',
-            'url': 'https://www.pmel.noaa.gov/tao/wwv/data/wwv_west.dat'
-            }
+    # WWV_West = {
+    #         'downloadType':'http',
+    #         'filename': 'wwv_west.dat',
+    #         'url': 'https://www.pmel.noaa.gov/tao/wwv/data/wwv_west.dat'
+    #         }
 
     UWIND_NCEP = {
             'downloadType':'ftp',
@@ -284,47 +284,46 @@ class sources(object):
             }
 
 
-    SAT_daily_NCEP = {
-            'downloadType':'ftp',
-            'filename': 'air.sig995.2019.nc',
-            'host': 'ftp.cdc.noaa.gov',
-            'location': '/Datasets/ncep.reanalysis.dailyavgs/surface/'
-            }
+    # SAT_daily_NCEP = {
+    #         'downloadType':'ftp',
+    #         'filename': 'air.sig995.2019.nc',
+    #         'host': 'ftp.cdc.noaa.gov',
+    #         'location': '/Datasets/ncep.reanalysis.dailyavgs/surface/'
+    #         }
 
-    SAT_monthly_NCEP = {
-            'downloadType':'ftp',
-            'filename': 'air.mon.mean.nc',
-            'host': 'ftp.cdc.noaa.gov',
-            'location': '/Datasets/ncep.reanalysis.derived/surface/'
-            }
+    # SAT_monthly_NCEP = {
+    #         'downloadType':'ftp',
+    #         'filename': 'air.mon.mean.nc',
+    #         'host': 'ftp.cdc.noaa.gov',
+    #         'location': '/Datasets/ncep.reanalysis.derived/surface/'
+    #         }
 
     IOD = {
             'downloadType':'http',
-            'url': 'https://www.esrl.noaa.gov/psd/gcos_wgsp/Timeseries/Data/dmi.long.data',
+            'url': 'https://psl.noaa.gov/gcos_wgsp/Timeseries/Data/dmi.had.long.data',
             'filename': 'iod.txt'
             }
 
 
     #https://www.ncdc.noaa.gov/cdr/oceanic/ocean-heat-content
-    HCA = {
-            'downloadType':'http',
-            'filename': 'hca.nc',
-            'url': 'http://data.nodc.noaa.gov/woa/DATA_ANALYSIS/3M_HEAT_CONTENT/NETCDF/heat_content/heat_content_anomaly_0-700_seasonal.nc'
-            }
+    # HCA = {
+    #         'downloadType':'http',
+    #         'filename': 'hca.nc',
+    #         'url': 'http://data.nodc.noaa.gov/woa/DATA_ANALYSIS/3M_HEAT_CONTENT/NETCDF/heat_content/heat_content_anomaly_0-700_seasonal.nc'
+    #         }
 
-    OLR_NOAA = {
-            'downloadType':'ftp',
-            'filename': 'olr.mon.mean.nc',
-            'host': 'ftp.cdc.noaa.gov',
-            'location': '/Datasets/interp_OLR/'
-            }
+    # OLR_NOAA = {
+    #         'downloadType':'ftp',
+    #         'filename': 'olr.mon.mean.nc',
+    #         'host': 'ftp.cdc.noaa.gov',
+    #         'location': '/Datasets/interp_OLR/'
+    #         }
 
-    otherForecasts = {
-            'downloadType':'http',
-            'url': 'https://iri.columbia.edu/~forecast/ensofcst/Data/ensofcst_ALLto1120', # TODO: this can change!!
-            'filename': 'other_forecasts.csv'
-
-            }
+    # otherForecasts = {
+    #         'downloadType':'http',
+    #         'url': 'https://iri.columbia.edu/~forecast/ensofcst/Data/ensofcst_ALLto1120', # TODO: this can change!!
+    #         'filename': 'other_forecasts.csv'
+    #         }
 
     KINDEX = {'downloadType':'local',
               'name': 'Kindex.mat',

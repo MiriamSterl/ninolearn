@@ -1,3 +1,7 @@
+from start import filedir
+import sys  
+sys.path.append(filedir)
+
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 
@@ -24,7 +28,7 @@ def pipeline(lead_time,  return_persistance=False):
     label at observation time "y_persistance". Hence, the output comes as:
     X, y, timey, y_persistance.
     """
-    reader = data_reader(startdate='1960-01', enddate='2017-12')
+    reader = data_reader(startdate='1960-01', enddate='2017-12') # UPDATEABLE!
 
     # indices
     oni = reader.read_csv('oni')

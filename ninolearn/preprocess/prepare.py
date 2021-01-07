@@ -88,43 +88,43 @@ def prep_oni():
     data = data.rename(index=str, columns={'ANOM': 'anom'})
     data.to_csv(join(processeddir, f'oni.csv'))
 
-def prep_nino_month(index="3.4", detrend=False):
-    """
-    Add a time axis corresponding to the first day of the central month.
-    """
-    print("Prepare monthly Nino3.4 timeseries.")
-    period ="M"
+# def prep_nino_month(index="3.4", detrend=False):
+#     """
+#     Add a time axis corresponding to the first day of the central month.
+#     """
+#     print("Prepare monthly Nino3.4 timeseries.")
+#     period ="M"
 
-    rawdata = read_raw.nino_anom(index=index, period=period, detrend=detrend)
-    rawdata = rawdata.rename(index=str, columns={'ANOM': 'anomNINO1+2',
-                                                 'ANOM.1': 'anomNINO3',
-                                                 'ANOM.2': 'anomNINO4',
-                                                 'ANOM.3': 'anomNINO3.4'})
+#     rawdata = read_raw.nino_anom(index=index, period=period, detrend=detrend)
+#     rawdata = rawdata.rename(index=str, columns={'ANOM': 'anomNINO1+2',
+#                                                  'ANOM.1': 'anomNINO3',
+#                                                  'ANOM.2': 'anomNINO4',
+#                                                  'ANOM.3': 'anomNINO3.4'})
 
-    dftime = ({'year': rawdata.YR.values,
-           'month': rawdata.MON.values,
-           'day': rawdata.YR.values/rawdata.YR.values})
-    dti = pd.to_datetime(dftime)
+#     dftime = ({'year': rawdata.YR.values,
+#            'month': rawdata.MON.values,
+#            'day': rawdata.YR.values/rawdata.YR.values})
+#     dti = pd.to_datetime(dftime)
 
-    data = pd.DataFrame(data=rawdata[f"anomNINO{index}"])
+#     data = pd.DataFrame(data=rawdata[f"anomNINO{index}"])
 
-    data.index = dti
-    data.index.name = 'time'
-    data = data.rename(index=str, columns={f'anomNINO{index}': 'anom'})
+#     data.index = dti
+#     data.index.name = 'time'
+#     data = data.rename(index=str, columns={f'anomNINO{index}': 'anom'})
 
-    filename = f"nino{index}{period}"
+#     filename = f"nino{index}{period}"
 
-    if detrend:
-        filename = ''.join(filename, "detrend")
-    filename = ''.join((filename,'.csv'))
+#     if detrend:
+#         filename = ''.join(filename, "detrend")
+#     filename = ''.join((filename,'.csv'))
 
-    data.to_csv(join(processeddir, filename))
+#     data.to_csv(join(processeddir, filename))
 
 def prep_wwv(cardinal_direction=""):
     """
     Add a time axis corresponding to the first day of the central month of a
     3-month season. For example: DJF 2019 becomes 2019-01-01. Further, rename
-    some axis.
+    some axes.
     """
     print(f"Prepare WWV {cardinal_direction} timeseries.")
     data = read_raw.wwv_anom(cardinal_direction=cardinal_direction)
@@ -155,7 +155,7 @@ def prep_wwv_proxy():
     for the time period between 1955 and 1979
     """
     print(f"Prepare WWV proxy.")
-    reader_wwv = data_reader(startdate='1980-01', enddate='2020-11') # enddate was: 2018-12
+    reader_wwv = data_reader(startdate='1980-01', enddate='2020-11') # UPDATEABLE!
     wwv = reader_wwv.read_csv('wwv')
 
     reader_kindex = data_reader(startdate='1955-01', enddate='1979-12')
@@ -175,116 +175,116 @@ def prep_iod():
     data = data.T.unstack()
     data = data.replace(-9999, np.nan)
 
-    dti = pd.date_range(start='1870-01-01', end='2020-12-01', freq='MS')
+    dti = pd.date_range(start='1870-01-01', end='2020-12-01', freq='MS') # UPDATEABLE!
 
     df = pd.DataFrame(data=data.values,index=dti, columns=['anom'])
     df.index.name = 'time'
 
     df.to_csv(join(processeddir, 'iod.csv'))
 
-def calc_warm_pool_edge():
-    """
-    calculate the warm pool edge
-    """
-    reader = data_reader(startdate='1948-01', enddate='2020-10',lon_min=120, lon_max=290) # enddate: was 2018-12
-    sst = reader.read_netcdf('sst', dataset='ERSSTv5', processed='')
+# def calc_warm_pool_edge():
+#     """
+#     calculate the warm pool edge
+#     """
+#     reader = data_reader(startdate='1948-01', enddate='2020-10',lon_min=120, lon_max=290) # enddate: was 2018-12
+#     sst = reader.read_netcdf('sst', dataset='ERSSTv5', processed='')
 
-    sst_eq = sst.loc[dict(latitude=0)]
-    warm_pool_edge = np.zeros(sst_eq.shape[0])
-    indeces = np.zeros(sst_eq.shape[0])
+#     sst_eq = sst.loc[dict(latitude=0)]
+#     warm_pool_edge = np.zeros(sst_eq.shape[0])
+#     indeces = np.zeros(sst_eq.shape[0])
 
-    # TODO  not very efficent
-    for i in range(sst_eq.shape[0]):
-        index = np.argwhere(sst_eq[i].values>28.).max()
-        indeces[i] = index
+#     # TODO  not very efficent
+#     for i in range(sst_eq.shape[0]):
+#         index = np.argwhere(sst_eq[i].values>28.).max()
+#         indeces[i] = index
 
-        slope = sst_eq[i, index] - sst_eq[i, index-1]
+#         slope = sst_eq[i, index] - sst_eq[i, index-1]
 
-        intercept28C = (sst_eq[i, index] - 28.) * slope + index
+#         intercept28C = (sst_eq[i, index] - 28.) * slope + index
 
-        warm_pool_edge[i] = intercept28C * 2.5 * 111.321
+#         warm_pool_edge[i] = intercept28C * 2.5 * 111.321
 
-    df = pd.DataFrame(data=warm_pool_edge,index=sst.time.values, columns=['total'])
-    df.index.name = 'time'
+#     df = pd.DataFrame(data=warm_pool_edge,index=sst.time.values, columns=['total'])
+#     df.index.name = 'time'
 
-    df.to_csv(join(processeddir, 'wp_edge.csv'))
-
-
-def prep_other_forecasts():
-    """
-    Get other forecasts into a decent format.
-    """
-    data = read_raw.other_forecasts()
-
-    n_rows = len(data)
-
-    # the first target season is assumed not to change
-    first_target_season = '2002-04-01'
-
-    for i in reversed(range(n_rows)):
-        row_str = data.row[i]
-        if row_str[:8] == "Forecast":
-            last_issued =datetime.strptime(row_str[16:], '%b %Y')
-            break
-
-    last_target_season = last_issued + pd.tseries.offsets.MonthBegin(10)
-
-    target_season = pd.date_range(start=first_target_season, end=last_target_season, freq='MS')
-
-    n_timesteps = len(target_season)
-
-    lead_time = np.arange(0, 9)
-    n_lead = len(lead_time)
-
-    # dummy array for the purpose to be filled
-    dummy = np.zeros((n_timesteps, n_lead))
-    dummy[:,:] = np.nan
-
-    j = 0
-    save_data = {}
-    for i in range(n_rows):
-        try:
-            # read the row
-            row_str = data.row[i]
-
-            # check if it is the last line of a forecast block
-            if row_str[:3]=='end':
-                j+=1
-
-            # check if it is a number otherwise go the except
-            test = int(row_str[0:4])
-
-            # allocate a new entry if model is new
-            model_name = row_str[40:52].strip()
-            if model_name not in save_data.keys() and model_name!='':
-                save_data[model_name] =  dummy.copy()
-
-            # write data to the considered target period
-            for k in range(9):
-                save_data[model_name][j+k, k] = int(row_str[0+k*4: 4+k*4])
-
-        except ValueError:
-            pass
+#     df.to_csv(join(processeddir, 'wp_edge.csv'))
 
 
-    # make the final save dictionary
-    save_dict = {}
+# def prep_other_forecasts():
+#     """
+#     Get other forecasts into a decent format.
+#     """
+#     data = read_raw.other_forecasts()
 
-    # replace model names that have a '/'  in their name (otherwise saving as
-    # netCDF would not be possible)
-    for key in save_data.keys():
-        key_save = key.replace('/', ' ')
-        save_dict[key_save] = (['target_season', 'lead'], save_data[key])
+#     n_rows = len(data)
 
-    # maka the final Data set
-    ds = xr.Dataset(save_dict, coords={'target_season': target_season,
-                                       'lead': lead_time })
+#     # the first target season is assumed not to change
+#     first_target_season = '2002-04-01'
 
-    # replace -999 with nans
-    ds=ds.where(ds!=-999)
+#     for i in reversed(range(n_rows)):
+#         row_str = data.row[i]
+#         if row_str[:8] == "Forecast":
+#             last_issued =datetime.strptime(row_str[16:], '%b %Y')
+#             break
 
-    # from unit cK to K
-    ds = ds/100
+#     last_target_season = last_issued + pd.tseries.offsets.MonthBegin(10)
 
-    # save data
-    ds.to_netcdf(join(processeddir, f'other_forecasts.nc'))
+#     target_season = pd.date_range(start=first_target_season, end=last_target_season, freq='MS')
+
+#     n_timesteps = len(target_season)
+
+#     lead_time = np.arange(0, 9)
+#     n_lead = len(lead_time)
+
+#     # dummy array for the purpose to be filled
+#     dummy = np.zeros((n_timesteps, n_lead))
+#     dummy[:,:] = np.nan
+
+#     j = 0
+#     save_data = {}
+#     for i in range(n_rows):
+#         try:
+#             # read the row
+#             row_str = data.row[i]
+
+#             # check if it is the last line of a forecast block
+#             if row_str[:3]=='end':
+#                 j+=1
+
+#             # check if it is a number otherwise go the except
+#             test = int(row_str[0:4])
+
+#             # allocate a new entry if model is new
+#             model_name = row_str[40:52].strip()
+#             if model_name not in save_data.keys() and model_name!='':
+#                 save_data[model_name] =  dummy.copy()
+
+#             # write data to the considered target period
+#             for k in range(9):
+#                 save_data[model_name][j+k, k] = int(row_str[0+k*4: 4+k*4])
+
+#         except ValueError:
+#             pass
+
+
+#     # make the final save dictionary
+#     save_dict = {}
+
+#     # replace model names that have a '/'  in their name (otherwise saving as
+#     # netCDF would not be possible)
+#     for key in save_data.keys():
+#         key_save = key.replace('/', ' ')
+#         save_dict[key_save] = (['target_season', 'lead'], save_data[key])
+
+#     # maka the final Data set
+#     ds = xr.Dataset(save_dict, coords={'target_season': target_season,
+#                                        'lead': lead_time })
+
+#     # replace -999 with nans
+#     ds=ds.where(ds!=-999)
+
+#     # from unit cK to K
+#     ds = ds/100
+
+#     # save data
+#     ds.to_netcdf(join(processeddir, f'other_forecasts.nc'))
