@@ -11,6 +11,8 @@ from ninolearn.learn.models.dem import DEM
 
 from ninolearn.learn.fit import cross_training
 
+from start import year, month
+
 
 def pipeline(lead_time,  return_persistance=False):
     """
@@ -28,7 +30,15 @@ def pipeline(lead_time,  return_persistance=False):
     label at observation time "y_persistance". Hence, the output comes as:
     X, y, timey, y_persistance.
     """
-    reader = data_reader(startdate='1960-01', enddate='2017-12') # UPDATEABLE!
+    # Latest available data from all sources is from 3 months before current month
+    if month < 4:
+        endyr = str(year-1)
+        endmth = str(month+9)
+    else:
+        endyr = str(year)
+        endmth = str(month-3)
+        
+    reader = data_reader(startdate='1960-01', enddate=endyr+'-'+endmth)
 
     # indices
     oni = reader.read_csv('oni')
