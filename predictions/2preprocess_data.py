@@ -9,8 +9,7 @@ the warm pool edge.
 """
 import numpy as np
 from ninolearn.utils import print_header
-from ninolearn.preprocess.prepare import prep_oni, prep_wwv
-from ninolearn.preprocess.prepare import prep_iod, prep_K_index, prep_wwv_proxy
+from ninolearn.preprocess.prepare import prep_oni, prep_wwv, prep_iod, prep_K_index, prep_wwv_proxy
 
 print_header("Prepare Data")
 
@@ -28,12 +27,6 @@ prep_wwv_proxy()
 # =============================================================================
 from ninolearn.IO import read_raw
 from ninolearn.preprocess.anomaly import postprocess
-from ninolearn.preprocess.regrid import to2_5x2_5
-
-# postprocess sst data from ERSSTv5
-sst_ERSSTv5 = read_raw.sst_ERSSTv5()
-sst_ERSSTv5_regrid = to2_5x2_5(sst_ERSSTv5)
-postprocess(sst_ERSSTv5_regrid)
 
 # NCEP reanalysis
 uwind = read_raw.uwind()
@@ -41,11 +34,6 @@ postprocess(uwind)
 
 vwind = read_raw.vwind()
 postprocess(vwind)
-
-# post process values from ORAS4 ssh
-ssh_oras4 = read_raw.oras4()
-ssh_oras4_regrid = to2_5x2_5(ssh_oras4)
-postprocess(ssh_oras4_regrid)
 
 # =============================================================================
 # Calculate some variables
