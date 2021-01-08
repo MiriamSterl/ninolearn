@@ -1,6 +1,6 @@
-from start import filedir
-import sys  
-sys.path.append(filedir)
+"""
+The GDNN models are trained.
+"""
 
 import numpy as np
 from sklearn.preprocessing import StandardScaler
@@ -39,10 +39,6 @@ def pipeline(lead_time,  return_persistance=False):
     # seasonal cycle
     cos = np.cos(np.arange(len(oni))/12*2*np.pi)
 
-    # network metrics
-    network_ssh = reader.read_statistic('network_metrics', variable='zos', dataset='ORAS4', processed="anom")
-    H_ssh = network_ssh['corrected_hamming_distance']
-
     # wind stress
     taux = reader.read_netcdf('taux', dataset='NCEP', processed='anom')
 
@@ -61,7 +57,6 @@ def pipeline(lead_time,  return_persistance=False):
                                  wwv,
                                  iod,
                                  cos,
-                                 H_ssh,
                                  taux_WP_mean
                                  ), axis=1)
 
