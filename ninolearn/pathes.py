@@ -4,8 +4,6 @@ This module contains a collection of pathes which are used within NinoLearn.
 NOTE: Specifiy the datadir in a private module which you may not commit to
 you public repository
 """
-import sys  
-sys.path.append('C:/Users/miria/Documents/Studie/Ninolearn/ninolearn/')
 from os.path import join
 
 try:
@@ -17,7 +15,6 @@ try:
     from ninolearn.private import basedir
 except ImportError:
     raise ImportError("Cannot import name 'basedir'. Specifiy the path to the root directory of ninolearn")
-
 
 rawdir = join(datadir, 'raw')
 processeddir = join(datadir, 'processed')
