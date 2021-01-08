@@ -14,6 +14,8 @@ from ninolearn.IO import read_raw
 from ninolearn.pathes import processeddir
 from ninolearn.IO.read_processed import data_reader
 
+from predictions.start import year, month
+
 
 if not exists(processeddir):
     print("make a data directory at %s" % processeddir)
@@ -88,37 +90,37 @@ def prep_oni():
     data = data.rename(index=str, columns={'ANOM': 'anom'})
     data.to_csv(join(processeddir, f'oni.csv'))
 
-# def prep_nino_month(index="3.4", detrend=False):
-#     """
-#     Add a time axis corresponding to the first day of the central month.
-#     """
-#     print("Prepare monthly Nino3.4 timeseries.")
-#     period ="M"
+def prep_nino_month(index="3.4", detrend=False):
+    """
+    Add a time axis corresponding to the first day of the central month.
+    """
+    print("Prepare monthly Nino3.4 timeseries.")
+    period ="M"
 
-#     rawdata = read_raw.nino_anom(index=index, period=period, detrend=detrend)
-#     rawdata = rawdata.rename(index=str, columns={'ANOM': 'anomNINO1+2',
-#                                                  'ANOM.1': 'anomNINO3',
-#                                                  'ANOM.2': 'anomNINO4',
-#                                                  'ANOM.3': 'anomNINO3.4'})
+    rawdata = read_raw.nino_anom(index=index, period=period, detrend=detrend)
+    rawdata = rawdata.rename(index=str, columns={'ANOM': 'anomNINO1+2',
+                                                  'ANOM.1': 'anomNINO3',
+                                                  'ANOM.2': 'anomNINO4',
+                                                  'ANOM.3': 'anomNINO3.4'})
 
-#     dftime = ({'year': rawdata.YR.values,
-#            'month': rawdata.MON.values,
-#            'day': rawdata.YR.values/rawdata.YR.values})
-#     dti = pd.to_datetime(dftime)
+    dftime = ({'year': rawdata.YR.values,
+            'month': rawdata.MON.values,
+            'day': rawdata.YR.values/rawdata.YR.values})
+    dti = pd.to_datetime(dftime)
 
-#     data = pd.DataFrame(data=rawdata[f"anomNINO{index}"])
+    data = pd.DataFrame(data=rawdata[f"anomNINO{index}"])
 
-#     data.index = dti
-#     data.index.name = 'time'
-#     data = data.rename(index=str, columns={f'anomNINO{index}': 'anom'})
+    data.index = dti
+    data.index.name = 'time'
+    data = data.rename(index=str, columns={f'anomNINO{index}': 'anom'})
 
-#     filename = f"nino{index}{period}"
+    filename = f"nino{index}{period}"
 
-#     if detrend:
-#         filename = ''.join(filename, "detrend")
-#     filename = ''.join((filename,'.csv'))
+    if detrend:
+        filename = ''.join(filename, "detrend")
+    filename = ''.join((filename,'.csv'))
 
-#     data.to_csv(join(processeddir, filename))
+    data.to_csv(join(processeddir, filename))
 
 def prep_wwv(cardinal_direction=""):
     """
@@ -155,7 +157,15 @@ def prep_wwv_proxy():
     for the time period between 1955 and 1979
     """
     print(f"Prepare WWV proxy.")
-    reader_wwv = data_reader(startdate='1980-01', enddate='2020-11') # UPDATEABLE!
+    # Latest available WWV data is from 2 months before the current one
+    if month < 3:
+        endyr = str(year-1)
+        endmth = str(month+10)
+    else:
+        endyr = str(year)
+        endmth = str(month-2)
+    
+    reader_wwv = data_reader(startdate='1980-01', enddate=endyr+'-'+endmth)
     wwv = reader_wwv.read_csv('wwv')
 
     reader_kindex = data_reader(startdate='1955-01', enddate='1979-12')
@@ -174,8 +184,16 @@ def prep_iod():
     data = read_raw.iod()
     data = data.T.unstack()
     data = data.replace(-9999, np.nan)
-
-    dti = pd.date_range(start='1870-01-01', end='2020-12-01', freq='MS') # UPDATEABLE!
+    
+    # Latest available IOD data is from 3 months before the current one.
+    # However, of every year in the data set, all months are included
+    # (if the data is not yet there, then as nans).
+    if month > 3:
+        endyr = str(year)
+    else:
+        endyr = str(year-1)
+    
+    dti = pd.date_range(start='1870-01-01', end=endyr+'-12-01', freq='MS')
 
     df = pd.DataFrame(data=data.values,index=dti, columns=['anom'])
     df.index.name = 'time'
