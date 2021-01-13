@@ -30,6 +30,7 @@ def pipeline(lead_time,  return_persistance=False):
     label at observation time "y_persistance". Hence, the output comes as:
     X, y, timey, y_persistance.
     """
+    # TODO! Check from data itself when last available month is.
     # Latest available data from all sources is from 3 months before current month
     if month < 4:
         endyr = str(year-1)
