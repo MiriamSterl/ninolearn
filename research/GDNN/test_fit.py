@@ -1,4 +1,4 @@
-mport numpy as np
+import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 from ninolearn.utils import include_time_lag

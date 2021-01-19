@@ -4,11 +4,11 @@ The GDNN models are trained.
 
 import numpy as np
 from sklearn.preprocessing import StandardScaler
+from pickle import dump
 
 from ninolearn.utils import include_time_lag
 from ninolearn.IO.read_processed import data_reader
 from ninolearn.learn.models.dem import DEM
-
 from ninolearn.learn.fit import cross_training
 
 from start import year, month
@@ -30,7 +30,7 @@ def pipeline(lead_time,  return_persistance=False):
     label at observation time "y_persistance". Hence, the output comes as:
     X, y, timey, y_persistance.
     """
-    # TODO! Check from data itself when last available month is.
+    # TODO! Check from data itself when last available month is. Or 3-->2
     # Latest available data from all sources is from 3 months before current month
     if month < 4:
         endyr = str(year-1)
@@ -43,7 +43,6 @@ def pipeline(lead_time,  return_persistance=False):
 
     # indices
     oni = reader.read_csv('oni')
-
     iod = reader.read_csv('iod')
     wwv = reader.read_csv('wwv_proxy')
 
@@ -74,6 +73,7 @@ def pipeline(lead_time,  return_persistance=False):
     # scale each feature
     scalerX = StandardScaler()
     Xorg = scalerX.fit_transform(feature_unscaled)
+    dump(scalerX, open('scalerX.pkl', 'wb'))
 
     # set nans to 0.
     Xorg = np.nan_to_num(Xorg)

@@ -409,7 +409,7 @@ class DEM(baseModel):
 
         for file in files:
             file_path = join(path, file)
-            self.ensemble.append(load_model(file_path))
+            self.ensemble.append(load_model(file_path, compile=False))
 
         output_neurons = self.ensemble[0].get_output_shape_at(0)[1]
 

@@ -32,7 +32,7 @@ vwind = read_raw.vwind()
 postprocess(vwind)
 
 # =============================================================================
-# Calculate some variables
+# Calculate wind speed and wind stress in x-direction
 # =============================================================================
 wspd = np.sqrt(uwind**2 + vwind**2)
 wspd.attrs = uwind.attrs.copy()
