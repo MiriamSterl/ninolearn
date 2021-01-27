@@ -14,7 +14,8 @@ from ninolearn.IO import read_raw
 from ninolearn.pathes import processeddir
 from ninolearn.IO.read_processed import data_reader
 
-from predictions.start import year, month
+#from predictions.start import year, month
+from ninolearn.pathes import rawdir
 
 
 if not exists(processeddir):
@@ -158,13 +159,11 @@ def prep_wwv_proxy():
     for the time period between 1955 and 1979
     """
     print(f"Prepare WWV proxy.")
-    # Latest available WWV data is from 2 months before the current one
-    if month < 3:
-        endyr = str(year-1)
-        endmth = str(month+10)
-    else:
-        endyr = str(year)
-        endmth = str(month-2)
+    wwv_raw = pd.read_csv(join(rawdir, 'wwv.dat'),
+                       delim_whitespace=True, header=4)
+    wwv_end = str(wwv_raw['date'].iloc[-1])
+    endyr = wwv_end[:4]
+    endmth = wwv_end[4:]
     
     reader_wwv = data_reader(startdate='1980-01', enddate=endyr+'-'+endmth)
     wwv = reader_wwv.read_csv('wwv')
@@ -185,12 +184,14 @@ def prep_iod():
     data = read_raw.iod()
     data = data.T.unstack()
     data = data.replace(-9999, np.nan)
-    # NEW
     data = data.dropna()
     enddate = data.index[-1]
-    endyr = enddate[0]
-    endmth = enddate[1]
-    
+    endyr = str(enddate[0])
+    if enddate[1] < 10:
+        endmth = '0'+str(enddate[1])
+    else:
+        endmth = str(enddate[1])
+
     dti = pd.date_range(start='1870-01-01', end=endyr+'-'+endmth+'-01', freq='MS')
 
     df = pd.DataFrame(data=data.values,index=dti, columns=['anom'])
