@@ -76,6 +76,7 @@ def prep_oni():
     Add a time axis corresponding to the first day of the central month of a
     3-month season. For example: DJF 2019 becomes 2019-01-01. Further, rename
     some axis.
+    TODO: documentation different; 3monthperiods shifted to last month
     """
     print("Prepare ONI timeseries.")
     data = read_raw.oni()
@@ -179,21 +180,18 @@ def prep_iod():
     """
     Prepare the IOD index dataframe
     """
-    print("Prepare IOD timeseries.")
-
+    print("Prepare IOD timeseries.") 
+    
     data = read_raw.iod()
     data = data.T.unstack()
     data = data.replace(-9999, np.nan)
+    # NEW
+    data = data.dropna()
+    enddate = data.index[-1]
+    endyr = enddate[0]
+    endmth = enddate[1]
     
-    # Latest available IOD data is from 3 months before the current one.
-    # However, of every year in the data set, all months are included
-    # (if the data is not yet there, then as nans).
-    if month > 3:
-        endyr = str(year)
-    else:
-        endyr = str(year-1)
-    
-    dti = pd.date_range(start='1870-01-01', end=endyr+'-12-01', freq='MS')
+    dti = pd.date_range(start='1870-01-01', end=endyr+'-'+endmth+'-01', freq='MS')
 
     df = pd.DataFrame(data=data.values,index=dti, columns=['anom'])
     df.index.name = 'time'
