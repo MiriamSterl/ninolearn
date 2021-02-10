@@ -70,18 +70,17 @@ Xorg = np.nan_to_num(Xorg)
 X = Xorg # dit kan later natuurlijk weg, maar even afwachten of de onderstaande dingen inderdaad weg mogen
 
 # time lag
-n_lags = 3
-step = 3
+# n_lags = 3
+# step = 3
 
 # shift such that lead time corresponds to the definition of lead time
-shift = 3
+# shift = 3
 
 # arange the feature array
 #X = Xorg[:-lead_time-shift,:]
 #X = include_time_lag(X, n_lags=n_lags, step=step)
 
 #%%
-
 test = dem.predict(X)
 
 

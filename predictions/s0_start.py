@@ -4,10 +4,10 @@ Do not commit this file to your public repository!
 """
 
 # directories
-datadir = ""
-plotdir = ""
-basedir = ""
+datadir = "" 
+plotdir = "" 
+basedir = "" 
 
-# the first month (1-12) and year for which you want the prediction to start
-month = 
-year = 
+# the first month (1-12) and year for which you want the prediction to start, as int
+start_pred_m = 
+start_pred_y = 

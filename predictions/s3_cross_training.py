@@ -14,17 +14,32 @@ from ninolearn.IO.read_processed import data_reader
 from ninolearn.learn.models.dem import DEM
 from ninolearn.learn.fit import cross_training
 
-#from s0_start import year, month
 #from ninolearn.pathes import processeddir
 
 
-# Read in enddate of data to use
+# =============================================================================
+# Determine the end of observational period and the lead times
+# =============================================================================
+from s0_start import start_pred_y, start_pred_m
 f = open("enddate.txt", "r")
 endyr = f.readline()
 endmth = f.readline()
+end_obs_m = int(endmth)
+end_obs_y = int(endyr)
+
+if start_pred_y > end_obs_y+1 or (start_pred_y > end_obs_y and start_pred_m > end_obs_m):
+    raise ValueError("More than 1 year difference between end of observations and start of predictions.\
+          Either include more observations or let the predictions start earlier.")
+
+lt_first = (start_pred_m - end_obs_m)%12 - 1 
+lead_times = np.arange(lt_first,lt_first+9) # TODO: 9 or 11? (8 or 10 mnths later?)
 
 
-def pipeline(lead_time,  return_persistance=False):
+# =============================================================================
+# Process data and train model
+# =============================================================================
+
+def pipeline(lead_time, return_persistance=False):
     """
     Data pipeline for the processing of the data before the Deep Ensemble
     is trained.
@@ -98,7 +113,7 @@ def pipeline(lead_time,  return_persistance=False):
         return X, y, timey
 
 if __name__=="__main__":
-    cross_training(DEM, pipeline, 1,
+    cross_training(DEM, pipeline, 1, lead_times,
                    layers=1, neurons = 32, dropout=0.05, noise_in=0.0, noise_sigma=0.,
                    noise_mu=0., l1_hidden=0.0, l2_hidden=0.,
                    l1_mu=0, l2_mu=0., l1_sigma=0,
