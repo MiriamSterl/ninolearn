@@ -2,23 +2,23 @@
 All data that is used to train the models is downloaded.
 """
 
-from start import basedir
+from s0_start import basedir
 import sys  
 sys.path.append(basedir)
 
 # =============================================================================
 # Checking year and month from start.py
 # =============================================================================
-from start import year, month
+# from s0_start import year, month
 
-if not isinstance(year,int):
-    raise TypeError('year must be int')
+# if not isinstance(year,int):
+#     raise TypeError('year must be int')
     
-if not isinstance(month,int):
-    raise TypeError('month must be int')
+# if not isinstance(month,int):
+#     raise TypeError('month must be int')
     
-if month<1 or month>12:
-    raise ValueError('month must be a number between 1 and 12')
+# if month<1 or month>12:
+#     raise ValueError('month must be a number between 1 and 12')
 
 # =============================================================================
 # Create relevant data directories

@@ -7,12 +7,12 @@ you public repository
 from os.path import join
 
 try:
-    from predictions.start import datadir # instead of: ninolearn.private
+    from predictions.s0_start import datadir # instead of: ninolearn.private
 except ImportError:
     raise ImportError("Cannot import name 'datadir'. Specifiy the path to your data directory using the name 'datadir' in the  ninolearn.private module which you may not commit to you public repository")
 
 try:
-    from predictions.start import basedir
+    from predictions.s0_start import basedir
 except ImportError:
     raise ImportError("Cannot import name 'basedir'. Specifiy the path to the root directory of ninolearn")
 

@@ -3,19 +3,25 @@ The GDNN models are trained.
 """
 
 import numpy as np
-import pandas as pd
-import xarray as xr
+#import pandas as pd
+#import xarray as xr
 from sklearn.preprocessing import StandardScaler
 from pickle import dump
-from os.path import join
+#from os.path import join
 
 from ninolearn.utils import include_time_lag
 from ninolearn.IO.read_processed import data_reader
 from ninolearn.learn.models.dem import DEM
 from ninolearn.learn.fit import cross_training
 
-from start import year, month
-from ninolearn.pathes import processeddir
+#from s0_start import year, month
+#from ninolearn.pathes import processeddir
+
+
+# Read in enddate of data to use
+f = open("enddate.txt", "r")
+endyr = f.readline()
+endmth = f.readline()
 
 
 def pipeline(lead_time,  return_persistance=False):
@@ -33,33 +39,7 @@ def pipeline(lead_time,  return_persistance=False):
     time), the target season "timey" (least month) and if selected the
     label at observation time "y_persistance". Hence, the output comes as:
     X, y, timey, y_persistance.
-    """
-    # Determining the enddate
-    # TODO: do this in some other file.
-    
-    oni = pd.read_csv(join(processeddir,'oni.csv'),index_col=0, parse_dates=True)
-    wwv = pd.read_csv(join(processeddir,'wwv_proxy.csv'),index_col=0, parse_dates=True)
-    iod = pd.read_csv(join(processeddir,'iod.csv'),index_col=0, parse_dates=True)
-    taux = xr.open_dataarray(join(processeddir,'taux_NCEP_anom.nc'))
-    
-    # Enddates of processed data sets
-    oni_end = oni.index[-1]
-    wwv_end = wwv.index[-1]
-    iod_end = iod.index[-1]
-    taux_end = taux.time.values[-1]
-    
-    # Find earliest enddate
-    earliest = oni_end
-    if wwv_end < earliest:
-        earliest = wwv_end
-    if iod_end < earliest:
-        earliest = iod_end
-    if taux_end < earliest:
-        earliest = taux_end
-        
-    endyr = str(earliest.year)
-    endmth = str(earliest.month)   
-    
+    """      
     reader = data_reader(startdate='1960-01', enddate=endyr+'-'+endmth)
 
     # indices
