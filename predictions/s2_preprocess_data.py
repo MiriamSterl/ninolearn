@@ -1,4 +1,5 @@
 """
+STEP 2: PREPROCESS DATA
 The downloaded data needed to be prepared to have the similar time-axis.
 In addition, the wind stress field and wind speed are computed.
 """
@@ -56,6 +57,7 @@ postprocess(taux)
 # =============================================================================
 # Determine earliest enddate that is in all datasets to be used for training
 # =============================================================================
+# TODO: perhaps this can be done more efficiently.
 
 oni = pd.read_csv(join(processeddir,'oni.csv'),index_col=0, parse_dates=True)
 wwv = pd.read_csv(join(processeddir,'wwv_proxy.csv'),index_col=0, parse_dates=True)
@@ -80,6 +82,7 @@ if taux_end < earliest:
 endyr = str(earliest.year)
 endmth = str(earliest.month)
 
+# TODO: find folder to put in
 f = open("enddate.txt", "x")
 f.write(endyr)
 f.write("\n")

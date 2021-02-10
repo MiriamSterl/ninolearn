@@ -1,27 +1,23 @@
 """
+STEP 3: CROSS TRAINING
 The GDNN models are trained.
 """
 
 import numpy as np
-#import pandas as pd
-#import xarray as xr
 from sklearn.preprocessing import StandardScaler
 from pickle import dump
-#from os.path import join
 
 from ninolearn.utils import include_time_lag
 from ninolearn.IO.read_processed import data_reader
 from ninolearn.learn.models.dem import DEM
 from ninolearn.learn.fit import cross_training
 
-#from ninolearn.pathes import processeddir
-
 
 # =============================================================================
 # Determine the end of observational period and the lead times
 # =============================================================================
 from s0_start import start_pred_y, start_pred_m
-f = open("enddate.txt", "r")
+f = open("enddate.txt", "r") # TODO: folder
 endyr = f.readline()
 endmth = f.readline()
 end_obs_m = int(endmth)
@@ -33,6 +29,7 @@ if start_pred_y > end_obs_y+1 or (start_pred_y > end_obs_y and start_pred_m > en
 
 lt_first = (start_pred_m - end_obs_m)%12 - 1 
 lead_times = np.arange(lt_first,lt_first+9) # TODO: 9 or 11? (8 or 10 mnths later?)
+np.save('lead_times', lead_times) # TODO: folder
 
 
 # =============================================================================
@@ -71,7 +68,7 @@ def pipeline(lead_time, return_persistance=False):
     taux_WP = taux.loc[dict(lat=slice(2.5,-2.5), lon=slice(120, 160))]
     taux_WP_mean = taux_WP.mean(dim='lat').mean(dim='lon')
 
-    # time lag
+    # include values from 3 and 6 months previously as predictor variables
     n_lags = 3
     step = 3
 
@@ -89,10 +86,12 @@ def pipeline(lead_time, return_persistance=False):
     # scale each feature
     scalerX = StandardScaler()
     Xorg = scalerX.fit_transform(feature_unscaled)
-    dump(scalerX, open('scalerX.pkl', 'wb'))
+    #dump(scalerX, open('scalerX.pkl', 'wb'))
 
     # set nans to 0.
     Xorg = np.nan_to_num(Xorg)
+    # TODO: find folder to save in
+    np.save('Xorg', Xorg)
 
     # arange the feature array
     X = Xorg[:-lead_time-shift,:]
@@ -120,4 +119,4 @@ if __name__=="__main__":
                    l2_sigma=0.0, lr=0.01, batch_size=100,
                    epochs=5000, n_segments=5, n_members_segment=3, patience=25,
                    activation='tanh',
-                   verbose=0, pdf="normal", name="gdnn_ex_pca")
+                   verbose=0, pdf="normal", name="gdnn_ex_pca") # TODO: perhaps change names?

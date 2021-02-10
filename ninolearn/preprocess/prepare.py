@@ -14,7 +14,6 @@ from ninolearn.IO import read_raw
 from ninolearn.pathes import processeddir
 from ninolearn.IO.read_processed import data_reader
 
-#from predictions.start import year, month
 from ninolearn.pathes import rawdir
 
 

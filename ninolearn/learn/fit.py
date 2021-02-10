@@ -12,7 +12,7 @@ from ninolearn.utils import print_header, small_print_header
 from ninolearn.pathes import modeldir, processeddir
 
 # evaluation decades
-decades = [1963, 1972, 1982, 1992, 2002, 2012, 2018] # TODO: update decades
+decades = [1963, 1972, 1982, 1992, 2002, 2012, 2021] # TODO: update decades automatically, add every 10 yrs
 decades_elninolike = []
 
 n_decades = len(decades)
@@ -22,14 +22,14 @@ n_decades = len(decades)
 #n_lead = len(lead_times)
 
 decade_color = ['orange', 'violet', 'limegreen', 'darkgoldenrod', 'red', 'royalblue']
-decade_name = ['1963-1971', '1972-1981', '1982-1991', '1992-2001', '2002-2011', '2012-2017'] # TODO: update
+decade_name = ['1963-1971', '1972-1981', '1982-1991', '1992-2001', '2002-2011', '2012-2020'] # TODO: update
 
 
 def cross_training(model, pipeline, n_iter, lead_times, **kwargs):
     """
     Training the model on different training sets in which each time a period\
     corresponing to a decade out of 1962-1971, 1972-1981, ..., 2012-last \
-    ovserved date is spared.
+    observed date is spared.
 
     :param model: A model that follows the guidelines how a model object\
     should be set up.
@@ -46,7 +46,7 @@ def cross_training(model, pipeline, n_iter, lead_times, **kwargs):
     for lead_time in lead_times:
         X, y, timey = pipeline(lead_time, return_persistance=False)
 
-        print_header(f'Lead time: {lead_time} month')
+        print_header(f'Lead time: {lead_time} months')
 
         for j in range(n_decades-1):
             m = model(**kwargs)
