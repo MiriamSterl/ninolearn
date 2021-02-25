@@ -203,6 +203,8 @@ def prep_dmi():
     """
     Prepare the DMI dataframe
     """
+    print("Prepare DMI timeseries.")
+    
     data = read_raw.dmi()
     time = data.variables['time'][:]
     dmi = data.variables['diff'][:]

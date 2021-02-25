@@ -39,7 +39,6 @@ from ninolearn.utils import print_header
 print_header("Download Data")
 
 download(sources.ONI)
-#download(sources.IOD)
 download(sources.DMI)
 download(sources.WWV)
 download(sources.KINDEX)

@@ -28,7 +28,7 @@ if start_pred_y > end_obs_y+1 or (start_pred_y > end_obs_y and start_pred_m > en
           Either include more observations or let the predictions start earlier.")
 
 lt_first = (start_pred_m - end_obs_m)%12 - 1 
-lead_times = np.arange(lt_first,lt_first+9) # TODO: 9 or 11? (8 or 10 mnths later?)
+lead_times = np.arange(lt_first,lt_first+11)
 np.save('lead_times', lead_times) # TODO: folder
 
 

@@ -1,7 +1,8 @@
 """
 STEP 2: PREPROCESS DATA
-The downloaded data needed to be prepared to have the similar time-axis.
-In addition, the wind stress field and wind speed are computed.
+The downloaded data needs to be prepared to have the similar time-axis.
+In addition, the wind stress field is computed, and the latest common date of 
+the observations is determined.
 """
 
 import numpy as np
@@ -11,7 +12,8 @@ from os.path import join
 from ninolearn.utils import print_header
 from ninolearn.preprocess.prepare import prep_oni, prep_wwv, prep_dmi, prep_K_index, prep_wwv_proxy
 from ninolearn.pathes import processeddir
-from s0_start import start_pred_y, start_pred_m
+import datetime
+from s0_start import current_year, current_month, start_pred_y, start_pred_m
 
 # TODO: can perhaps be merged with download.
 print_header("Prepare Data")
@@ -21,7 +23,6 @@ print_header("Prepare Data")
 # =============================================================================
 prep_oni()
 prep_wwv()
-#prep_iod()
 prep_dmi()
 prep_K_index()
 prep_wwv_proxy()
@@ -32,7 +33,6 @@ prep_wwv_proxy()
 from ninolearn.IO import read_raw
 from ninolearn.preprocess.anomaly import postprocess
 
-# NCEP reanalysis
 uwind = read_raw.uwind()
 postprocess(uwind)
 
@@ -60,34 +60,33 @@ postprocess(taux)
 # =============================================================================
 # Determine earliest enddate that is in all datasets to be used for training
 # =============================================================================
-# TODO: perhaps this can be done more efficiently.
-
 oni = pd.read_csv(join(processeddir,'oni.csv'),index_col=0, parse_dates=True)
 wwv = pd.read_csv(join(processeddir,'wwv_proxy.csv'),index_col=0, parse_dates=True)
-iod = pd.read_csv(join(processeddir,'iod.csv'),index_col=0, parse_dates=True)
+dmi = pd.read_csv(join(processeddir,'dmi.csv'),index_col=0, parse_dates=True)
 taux = xr.open_dataarray(join(processeddir,'taux_NCEP_anom.nc'))
 
 # Enddates of processed data sets
 oni_end = oni.index[-1]
 wwv_end = wwv.index[-1]
-iod_end = iod.index[-1]
-taux_end = taux.time.values[-1]
+dmi_end = dmi.index[-1]
+taux_end = pd.Timestamp(taux.time.values[-1])
 
-# Find earliest enddate
-earliest = oni_end
-if wwv_end < earliest:
-    earliest = wwv_end
-if iod_end < earliest:
-    earliest = iod_end
-if taux_end < earliest:
-    earliest = taux_end
-    
-# TODO: ensure that end of observations is BEFORE start of predictions! Include check.
-    
-endyr = str(earliest.year)
-endmth = str(earliest.month)
+# Find latest common date of observations = earliest end date of observations
+earliest = min(oni_end,wwv_end,dmi_end,taux_end)
+ 
+# Check if end of observations is before start of predictions.
+# If not, take current month+year as enddate.
+# TODO: denk na of deze malle check wel nodig is. (nu je de huidige maand invult)
+if earliest < datetime.datetime(start_pred_y, start_pred_m,1,0,0): 
+    endyr = str(earliest.year)
+    endmth = str(earliest.month)
+else:
+    endyr = str(current_year)
+    endmth = str(current_month)
 
+# Save enddate of observations to be used
 # TODO: find folder to put in
+print_header("Saving enddate of observations")
 f = open("enddate.txt", "x")
 f.write(endyr)
 f.write("\n")
