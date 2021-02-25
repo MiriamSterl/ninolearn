@@ -1,6 +1,7 @@
 from os.path import join
 import pandas as pd
 import xarray as xr
+from netCDF4 import Dataset
 from scipy.io import loadmat
 
 from ninolearn.pathes import rawdir
@@ -68,6 +69,15 @@ def iod():
                        delim_whitespace=True, header=None, skiprows=1, skipfooter=7,
                        index_col=0, engine='python')
     return data
+
+
+def dmi():
+    """
+    get DMI data
+    """
+    data = Dataset(join(rawdir, 'dmi.nc'))
+    return data
+
 
 def K_index():
     data = loadmat(join(rawdir, "Kindex.mat"))

@@ -197,110 +197,127 @@ def prep_iod():
     df.index.name = 'time'
 
     df.to_csv(join(processeddir, 'iod.csv'))
+    
+    
+def prep_dmi():
+    """
+    Prepare the DMI dataframe
+    """
+    data = read_raw.dmi()
+    time = data.variables['time'][:]
+    dmi = data.variables['diff'][:]
+    
+    dti = pd.date_range(start='1854-01-01', periods=len(time), freq='MS')
+    df = pd.DataFrame(data=dmi,index=dti, columns=['anom'])
+    df.index.name = 'time'
+    df = df.dropna()
+    
+    df.to_csv(join(processeddir, 'dmi.csv'))
+    
 
-# def calc_warm_pool_edge():
-#     """
-#     calculate the warm pool edge
-#     """
-#     reader = data_reader(startdate='1948-01', enddate='2020-10',lon_min=120, lon_max=290) # enddate: was 2018-12
-#     sst = reader.read_netcdf('sst', dataset='ERSSTv5', processed='')
+def calc_warm_pool_edge():
+    """
+    calculate the warm pool edge
+    """
+    reader = data_reader(startdate='1948-01', enddate='2020-10',lon_min=120, lon_max=290) # enddate: was 2018-12
+    sst = reader.read_netcdf('sst', dataset='ERSSTv5', processed='')
 
-#     sst_eq = sst.loc[dict(latitude=0)]
-#     warm_pool_edge = np.zeros(sst_eq.shape[0])
-#     indeces = np.zeros(sst_eq.shape[0])
+    sst_eq = sst.loc[dict(latitude=0)]
+    warm_pool_edge = np.zeros(sst_eq.shape[0])
+    indeces = np.zeros(sst_eq.shape[0])
 
-#     # TODO  not very efficent
-#     for i in range(sst_eq.shape[0]):
-#         index = np.argwhere(sst_eq[i].values>28.).max()
-#         indeces[i] = index
+    # TODO  not very efficent
+    for i in range(sst_eq.shape[0]):
+        index = np.argwhere(sst_eq[i].values>28.).max()
+        indeces[i] = index
 
-#         slope = sst_eq[i, index] - sst_eq[i, index-1]
+        slope = sst_eq[i, index] - sst_eq[i, index-1]
 
-#         intercept28C = (sst_eq[i, index] - 28.) * slope + index
+        intercept28C = (sst_eq[i, index] - 28.) * slope + index
 
-#         warm_pool_edge[i] = intercept28C * 2.5 * 111.321
+        warm_pool_edge[i] = intercept28C * 2.5 * 111.321
 
-#     df = pd.DataFrame(data=warm_pool_edge,index=sst.time.values, columns=['total'])
-#     df.index.name = 'time'
+    df = pd.DataFrame(data=warm_pool_edge,index=sst.time.values, columns=['total'])
+    df.index.name = 'time'
 
-#     df.to_csv(join(processeddir, 'wp_edge.csv'))
-
-
-# def prep_other_forecasts():
-#     """
-#     Get other forecasts into a decent format.
-#     """
-#     data = read_raw.other_forecasts()
-
-#     n_rows = len(data)
-
-#     # the first target season is assumed not to change
-#     first_target_season = '2002-04-01'
-
-#     for i in reversed(range(n_rows)):
-#         row_str = data.row[i]
-#         if row_str[:8] == "Forecast":
-#             last_issued =datetime.strptime(row_str[16:], '%b %Y')
-#             break
-
-#     last_target_season = last_issued + pd.tseries.offsets.MonthBegin(10)
-
-#     target_season = pd.date_range(start=first_target_season, end=last_target_season, freq='MS')
-
-#     n_timesteps = len(target_season)
-
-#     lead_time = np.arange(0, 9)
-#     n_lead = len(lead_time)
-
-#     # dummy array for the purpose to be filled
-#     dummy = np.zeros((n_timesteps, n_lead))
-#     dummy[:,:] = np.nan
-
-#     j = 0
-#     save_data = {}
-#     for i in range(n_rows):
-#         try:
-#             # read the row
-#             row_str = data.row[i]
-
-#             # check if it is the last line of a forecast block
-#             if row_str[:3]=='end':
-#                 j+=1
-
-#             # check if it is a number otherwise go the except
-#             test = int(row_str[0:4])
-
-#             # allocate a new entry if model is new
-#             model_name = row_str[40:52].strip()
-#             if model_name not in save_data.keys() and model_name!='':
-#                 save_data[model_name] =  dummy.copy()
-
-#             # write data to the considered target period
-#             for k in range(9):
-#                 save_data[model_name][j+k, k] = int(row_str[0+k*4: 4+k*4])
-
-#         except ValueError:
-#             pass
+    df.to_csv(join(processeddir, 'wp_edge.csv'))
 
 
-#     # make the final save dictionary
-#     save_dict = {}
+def prep_other_forecasts():
+    """
+    Get other forecasts into a decent format.
+    """
+    data = read_raw.other_forecasts()
 
-#     # replace model names that have a '/'  in their name (otherwise saving as
-#     # netCDF would not be possible)
-#     for key in save_data.keys():
-#         key_save = key.replace('/', ' ')
-#         save_dict[key_save] = (['target_season', 'lead'], save_data[key])
+    n_rows = len(data)
 
-#     # maka the final Data set
-#     ds = xr.Dataset(save_dict, coords={'target_season': target_season,
-#                                        'lead': lead_time })
+    # the first target season is assumed not to change
+    first_target_season = '2002-04-01'
 
-#     # replace -999 with nans
-#     ds=ds.where(ds!=-999)
+    for i in reversed(range(n_rows)):
+        row_str = data.row[i]
+        if row_str[:8] == "Forecast":
+            last_issued =datetime.strptime(row_str[16:], '%b %Y')
+            break
 
-#     # from unit cK to K
-#     ds = ds/100
+    last_target_season = last_issued + pd.tseries.offsets.MonthBegin(10)
 
-#     # save data
-#     ds.to_netcdf(join(processeddir, f'other_forecasts.nc'))
+    target_season = pd.date_range(start=first_target_season, end=last_target_season, freq='MS')
+
+    n_timesteps = len(target_season)
+
+    lead_time = np.arange(0, 9)
+    n_lead = len(lead_time)
+
+    # dummy array for the purpose to be filled
+    dummy = np.zeros((n_timesteps, n_lead))
+    dummy[:,:] = np.nan
+
+    j = 0
+    save_data = {}
+    for i in range(n_rows):
+        try:
+            # read the row
+            row_str = data.row[i]
+
+            # check if it is the last line of a forecast block
+            if row_str[:3]=='end':
+                j+=1
+
+            # check if it is a number otherwise go the except
+            test = int(row_str[0:4])
+
+            # allocate a new entry if model is new
+            model_name = row_str[40:52].strip()
+            if model_name not in save_data.keys() and model_name!='':
+                save_data[model_name] =  dummy.copy()
+
+            # write data to the considered target period
+            for k in range(9):
+                save_data[model_name][j+k, k] = int(row_str[0+k*4: 4+k*4])
+
+        except ValueError:
+            pass
+
+
+    # make the final save dictionary
+    save_dict = {}
+
+    # replace model names that have a '/'  in their name (otherwise saving as
+    # netCDF would not be possible)
+    for key in save_data.keys():
+        key_save = key.replace('/', ' ')
+        save_dict[key_save] = (['target_season', 'lead'], save_data[key])
+
+    # maka the final Data set
+    ds = xr.Dataset(save_dict, coords={'target_season': target_season,
+                                        'lead': lead_time })
+
+    # replace -999 with nans
+    ds=ds.where(ds!=-999)
+
+    # from unit cK to K
+    ds = ds/100
+
+    # save data
+    ds.to_netcdf(join(processeddir, f'other_forecasts.nc'))

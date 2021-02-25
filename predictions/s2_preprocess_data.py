@@ -9,9 +9,11 @@ import pandas as pd
 import xarray as xr
 from os.path import join
 from ninolearn.utils import print_header
-from ninolearn.preprocess.prepare import prep_oni, prep_wwv, prep_iod, prep_K_index, prep_wwv_proxy
+from ninolearn.preprocess.prepare import prep_oni, prep_wwv, prep_dmi, prep_K_index, prep_wwv_proxy
 from ninolearn.pathes import processeddir
+from s0_start import start_pred_y, start_pred_m
 
+# TODO: can perhaps be merged with download.
 print_header("Prepare Data")
 
 # =============================================================================
@@ -19,7 +21,8 @@ print_header("Prepare Data")
 # =============================================================================
 prep_oni()
 prep_wwv()
-prep_iod()
+#prep_iod()
+prep_dmi()
 prep_K_index()
 prep_wwv_proxy()
 
@@ -78,6 +81,8 @@ if iod_end < earliest:
     earliest = iod_end
 if taux_end < earliest:
     earliest = taux_end
+    
+# TODO: ensure that end of observations is BEFORE start of predictions! Include check.
     
 endyr = str(earliest.year)
 endmth = str(earliest.month)
