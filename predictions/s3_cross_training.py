@@ -5,7 +5,7 @@ The GDNN models are trained.
 
 import numpy as np
 from sklearn.preprocessing import StandardScaler
-from pickle import dump
+#from pickle import dump
 
 from ninolearn.utils import include_time_lag
 from ninolearn.IO.read_processed import data_reader
@@ -56,7 +56,7 @@ def pipeline(lead_time, return_persistance=False):
 
     # indices
     oni = reader.read_csv('oni')
-    iod = reader.read_csv('iod')
+    dmi = reader.read_csv('dmi')
     wwv = reader.read_csv('wwv_proxy')
 
     # seasonal cycle
@@ -78,7 +78,7 @@ def pipeline(lead_time, return_persistance=False):
     # process features
     feature_unscaled = np.stack((oni,
                                  wwv,
-                                 iod,
+                                 dmi,
                                  cos,
                                  taux_WP_mean
                                  ), axis=1)
@@ -90,12 +90,12 @@ def pipeline(lead_time, return_persistance=False):
 
     # set nans to 0.
     Xorg = np.nan_to_num(Xorg)
-    # TODO: find folder to save in
-    np.save('Xorg', Xorg)
+    #np.save('Xorg', Xorg) 
 
     # arange the feature array
     X = Xorg[:-lead_time-shift,:]
     X = include_time_lag(X, n_lags=n_lags, step=step)
+    np.save('features', X) # TODO: find folder to save in
 
     # arange label
     yorg = oni.values

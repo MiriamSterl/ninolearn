@@ -27,6 +27,7 @@ prep_dmi()
 prep_K_index()
 prep_wwv_proxy()
 
+
 # =============================================================================
 # Prepare the gridded data
 # =============================================================================
@@ -38,6 +39,7 @@ postprocess(uwind)
 
 vwind = read_raw.vwind()
 postprocess(vwind)
+
 
 # =============================================================================
 # Calculate wind speed and wind stress in x-direction
@@ -57,6 +59,7 @@ taux.attrs['var_desc'] = 'x-wind-stress'
 taux.attrs['units'] = 'm^2/s^2'
 postprocess(taux)
 
+
 # =============================================================================
 # Determine earliest enddate that is in all datasets to be used for training
 # =============================================================================
@@ -71,15 +74,15 @@ wwv_end = wwv.index[-1]
 dmi_end = dmi.index[-1]
 taux_end = pd.Timestamp(taux.time.values[-1])
 
-# Find latest common date of observations = earliest end date of observations
-earliest = min(oni_end,wwv_end,dmi_end,taux_end)
+# Find latest common date of observations
+latest = min(oni_end,wwv_end,dmi_end,taux_end)
  
 # Check if end of observations is before start of predictions.
 # If not, take current month+year as enddate.
 # TODO: denk na of deze malle check wel nodig is. (nu je de huidige maand invult)
-if earliest < datetime.datetime(start_pred_y, start_pred_m,1,0,0): 
-    endyr = str(earliest.year)
-    endmth = str(earliest.month)
+if latest < datetime.datetime(start_pred_y, start_pred_m,1,0,0): 
+    endyr = str(latest.year)
+    endmth = str(latest.month)
 else:
     endyr = str(current_year)
     endmth = str(current_month)

@@ -6,7 +6,7 @@ All data that is used to train the models is downloaded.
 from s0_start import basedir
 import sys  
 sys.path.append(basedir)
-
+#%%
 # =============================================================================
 # Create relevant data directories
 # =============================================================================
