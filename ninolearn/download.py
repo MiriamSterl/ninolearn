@@ -301,6 +301,12 @@ class sources(object):
             'url': 'https://psl.noaa.gov/gcos_wgsp/Timeseries/Data/dmi.had.long.data',
             'filename': 'iod.txt'
             }
+    
+    DMI = {
+            'downloadType':'http',
+            'url': 'http://climexp.knmi.nl/data/idmi_ersst.nc',
+            'filename': 'dmi.nc'
+            }
 
 
     #https://www.ncdc.noaa.gov/cdr/oceanic/ocean-heat-content
@@ -316,15 +322,17 @@ class sources(object):
             'host': 'ftp.cdc.noaa.gov',
             'location': '/Datasets/interp_OLR/'
             }
-
-    # otherForecasts = {
-    #         'downloadType':'http',
-    #         'url': 'https://iri.columbia.edu/~forecast/ensofcst/Data/ensofcst_ALLto1120',
-    #         'filename': 'other_forecasts.csv'
-    #         }
-
+    
     KINDEX = {'downloadType':'local',
               'name': 'Kindex.mat',
               'path': join(basedir,'ninolearn/data/Kindex.mat')
             }
+
+    otherForecasts = { # TODO: update filename with MMYY!
+            'downloadType':'http',
+            'url': 'https://iri.columbia.edu/~forecast/ensofcst/Data/ensofcst_ALLto0121',
+            'filename': 'other_forecasts.csv'
+            }
+
+    
 
