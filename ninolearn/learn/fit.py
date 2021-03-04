@@ -11,18 +11,17 @@ from os import listdir
 from ninolearn.utils import print_header, small_print_header
 from ninolearn.pathes import modeldir, processeddir
 
+
 # evaluation decades
-decades = [1963, 1972, 1982, 1992, 2002, 2012, 2021] # TODO: update decades automatically, add every 10 yrs
+from s0_start import current_year
+decades= np.hstack(([1963], np.arange(1972,current_year,10),[current_year])) 
 decades_elninolike = []
 
 n_decades = len(decades)
+decade_name = np.empty(n_decades-1, dtype=object)
+for i in range(n_decades-1):
+    decade_name[i] = str(decades[i]) + '-' + str(decades[i+1]-1)
 
-# lead times for the evaluation
-#lead_times = [0, 3, 6, 9, 12, 15, 18, 21]
-#n_lead = len(lead_times)
-
-decade_color = ['orange', 'violet', 'limegreen', 'darkgoldenrod', 'red', 'royalblue']
-decade_name = ['1963-1971', '1972-1981', '1982-1991', '1992-2001', '2002-2011', '2012-2020'] # TODO: update
 
 
 def cross_training(model, pipeline, n_iter, lead_times, **kwargs):

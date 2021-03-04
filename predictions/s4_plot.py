@@ -1,5 +1,5 @@
 """
-STEP 5: PLOT
+STEP 4: PLOT [OPTIONAL]
 Plotting the predictions.
 """
 

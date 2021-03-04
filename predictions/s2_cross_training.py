@@ -1,23 +1,24 @@
 """
-STEP 3: CROSS TRAINING
+STEP 2: CROSS TRAINING
 The GDNN models are trained.
 """
 
 import numpy as np
 from sklearn.preprocessing import StandardScaler
-#from pickle import dump
+from os.path import join
 
 from ninolearn.utils import include_time_lag
 from ninolearn.IO.read_processed import data_reader
 from ninolearn.learn.models.dem import DEM
 from ninolearn.learn.fit import cross_training
+from ninolearn.pathes import infodir
 
 
 # =============================================================================
 # Determine the end of observational period and the lead times
 # =============================================================================
 from s0_start import start_pred_y, start_pred_m
-f = open("enddate.txt", "r") # TODO: folder
+f = open(join(infodir,"enddate.txt"), "r")
 endyr = f.readline()
 endmth = f.readline()
 end_obs_m = int(endmth)
@@ -29,7 +30,7 @@ if start_pred_y > end_obs_y+1 or (start_pred_y > end_obs_y and start_pred_m > en
 
 lt_first = (start_pred_m - end_obs_m)%12 - 1 
 lead_times = np.arange(lt_first,lt_first+11)
-np.save('lead_times', lead_times) # TODO: folder
+np.save(join(infodir,'lead_times'), lead_times)
 
 
 # =============================================================================
@@ -95,7 +96,7 @@ def pipeline(lead_time, return_persistance=False):
     # arange the feature array
     X = Xorg[:-lead_time-shift,:]
     X = include_time_lag(X, n_lags=n_lags, step=step)
-    np.save('features', X) # TODO: find folder to save in
+    np.save(join(infodir,'features'), X)
 
     # arange label
     yorg = oni.values
@@ -119,4 +120,4 @@ if __name__=="__main__":
                    l2_sigma=0.0, lr=0.01, batch_size=100,
                    epochs=5000, n_segments=5, n_members_segment=3, patience=25,
                    activation='tanh',
-                   verbose=0, pdf="normal", name="gdnn_ex_pca") # TODO: perhaps change names?
+                   verbose=0, pdf="normal", name="gdnn_ex_pca")

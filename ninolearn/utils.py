@@ -61,9 +61,29 @@ def scale(x):
 
 def scaleMax(x):
     """
-    sacle timeseries by absolute maximum
+    scale timeseries by absolute maximum
     """
     return x/np.max(np.abs(x))
+
+
+def month_to_season(month):
+    """
+    Translates a month (int between 1 and 12) to a string denoting the 3-month
+    period centered around the given month.
+    """
+    switcher = {1: 'DJF',
+                2: 'JFM',
+                3: 'FMA',
+                4: 'MAM',
+                5: 'AMJ',
+                6: 'MJJ',
+                7: 'JJA',
+                8: 'JAS',
+                9: 'ASO',
+                10: 'SON',
+                11: 'OND',
+                12: 'NDJ'}
+    return switcher[month]
 
 
 """

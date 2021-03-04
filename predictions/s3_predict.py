@@ -1,13 +1,16 @@
 """
-STEP 4: PREDICT
+STEP 3: PREDICT
 The GDNN models are used to make predictions.
 """
 import numpy as np
-#from pickle import load
+import pandas as pd
+from scipy.ndimage.filters import uniform_filter1d
+from os.path import join
 
-from ninolearn.pathes import modeldir
+from ninolearn.utils import month_to_season
+from ninolearn.pathes import modeldir, infodir
 from ninolearn.learn.models.dem import DEM
-from ninolearn.learn.fit import decades # TODO: update decades --> perhaps in start already
+from ninolearn.learn.fit import decades
 
 from s0_start import start_pred_y, start_pred_m
 
@@ -18,7 +21,7 @@ from s0_start import start_pred_y, start_pred_m
 # =============================================================================
 
 #scalerX = load(open('scalerX.pkl', 'rb'))
-X = np.load('features.npy') # TODO: folder
+X = np.load(join(infodir,'features.npy'))
 X = X[-1:,:] # now use only the latest observation to produce forecast
 
 
@@ -27,7 +30,7 @@ X = X[-1:,:] # now use only the latest observation to produce forecast
 # For each lead time, load ensemble of models and make prediction
 # =============================================================================
 
-lead_times = np.load('lead_times.npy') # TODO: folder
+lead_times = np.load(join(infodir,'lead_times.npy'))
 predictions = np.zeros((2,len(lead_times))) # first row: mean, second row: std
 
 for i in np.arange(len(lead_times)):
@@ -42,57 +45,31 @@ for i in np.arange(len(lead_times)):
     for j in decades[:-1]:
         dem.load(location=modeldir, dir_name = 'gdnn_ex_pca_decade'+str(j)+'_lead'+str(lead_times[i]))
     pred = dem.predict(X)
-    predictions[0,i] = pred[0][0]
-    predictions[1,i] = pred[1][0]
+    predictions[0,i] = pred[0][0] # mean
+    predictions[1,i] = pred[1][0] # std
 
 #%%
-# TODO: dit allemaal ordenen
-from scipy.ndimage.filters import uniform_filter1d
+# =============================================================================
+# Take 3-month averages and save predictions
+# =============================================================================
 
+# Moving average with window of 3 months
 pred_seasons_mean = uniform_filter1d(predictions[0,:], size=3)
-pred_seasons_mean = pred_seasons_mean[1:-1] # TODO: CHECK! Goede lengte?
+pred_seasons_mean = pred_seasons_mean[1:-1]
 pred_seasons_std = uniform_filter1d(predictions[1,:], size=3)
-pred_seasons_std = pred_seasons_std[1:-1] # TODO: CHECK! Goede lengte?
+pred_seasons_std = pred_seasons_std[1:-1]
 
-
-# TODO: maybe use generateFileName or make something like that
-# TODO: not necessary later --> move this to saving the dataframe
-if start_pred_m < 10:
-    filename = 'predictions_'+str(start_pred_y)+'_0'+str(start_pred_m)
-else:
-    filename = 'predictions_'+str(start_pred_y)+'_'+str(start_pred_m)
-np.save(filename, predictions)
-
-
-def month_to_season(month):
-    """
-    Translates a month (int between 1 and 12) to a string denoting the 3-month
-    period centered around the given month.
-    """
-    switcher = {1: 'DJF',
-                2: 'JFM',
-                3: 'FMA',
-                4: 'MAM',
-                5: 'AMJ',
-                6: 'MJJ',
-                7: 'JJA',
-                8: 'JAS',
-                9: 'ASO',
-                10: 'SON',
-                11: 'OND',
-                12: 'NDJ'}
-    return switcher[month]
-# TODO: perhaps move this to utils
-
-
+# Translate months to 3-month seasons centered around central month
 seasons = np.empty(len(pred_seasons_mean), dtype=object)
 for i in np.arange(len(pred_seasons_mean)):
     seasons[i] = month_to_season(start_pred_m+i)
 
-import pandas as pd
-
+# Save predictions as DataFrame
 df = pd.DataFrame({'Mean': pred_seasons_mean, 'STD': pred_seasons_std}, index = seasons)
 df.index.name = 'Season'
-#%%
-df.to_csv('predictions.csv') # TODO: folder + naam!! Zoals boven
+if start_pred_m < 10:
+    filename = 'predictions_'+str(start_pred_y)+'_0'+str(start_pred_m)+'.csv'
+else:
+    filename = 'predictions_'+str(start_pred_y)+'_'+str(start_pred_m)+'.csv'
+df.to_csv(filename)
 
