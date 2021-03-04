@@ -121,3 +121,5 @@ if __name__=="__main__":
                    epochs=5000, n_segments=5, n_members_segment=3, patience=25,
                    activation='tanh',
                    verbose=0, pdf="normal", name="gdnn_ex_pca")
+    
+print("\n \n Step 2 finished, continue to step 3!")

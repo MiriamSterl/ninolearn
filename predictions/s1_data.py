@@ -142,3 +142,4 @@ f.write("\n")
 f.write(endmth)
 f.close()
 
+print("Step 1 finished, continue to step 2!")

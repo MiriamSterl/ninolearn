@@ -18,10 +18,10 @@ from s0_start import start_pred_y, start_pred_m, current_year, current_month
 
 lead_times = np.load(join(infodir,'lead_times.npy'))[:-2]
 if start_pred_m < 10:
-    filename = 'predictions_'+str(start_pred_y)+'_0'+str(start_pred_m)+'.csv'
+    filename = 'predictions_'+str(start_pred_y)+'_0'+str(start_pred_m)
 else:
-    filename = 'predictions_'+str(start_pred_y)+'_'+str(start_pred_m)+'.csv'
-predictions = pd.read_csv(filename, index_col=0)
+    filename = 'predictions_'+str(start_pred_y)+'_'+str(start_pred_m)
+predictions = pd.read_csv(filename+'.csv', index_col=0)
 seasons = predictions.index.values
 mean = predictions['Mean'].values
 std = predictions['STD'].values
@@ -60,8 +60,8 @@ else:
         plot_obs = True
 if plot_obs:
     last_obs = oni_obs.iloc[-1]['anom']
-    plt.scatter(lead_times[0]-2,last_obs)
     plt.plot([lead_times[0]-2, lead_times[0]], [last_obs, mean[0]], ':k')
+    plt.scatter(lead_times[0]-2,last_obs, color='b')
     tick1 = num_to_month(last_date.month)
     tick2 = month_to_season(last_date.month)
     ticklabels = np.hstack((tick1,tick2,seasons))
@@ -69,3 +69,7 @@ if plot_obs:
 else:
     plt.xticks(lead_times, seasons)
 
+plt.savefig(filename+'.png')
+
+
+print("Step 4 finished, continue to step 5!")

@@ -78,3 +78,4 @@ df.to_csv(filename)
 
 print("Predictions saved!")
 
+print("\n Step 3 finished, continue to step 4 or step 5!")

@@ -11,3 +11,5 @@ os.remove(rawdir)
 os.remove(processeddir)
 os.remove(modeldir)
 os.remove(infodir)
+
+print("Done!")
