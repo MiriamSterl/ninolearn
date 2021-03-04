@@ -7,7 +7,7 @@ import pandas as pd
 from scipy.ndimage.filters import uniform_filter1d
 from os.path import join
 
-from ninolearn.utils import month_to_season
+from ninolearn.utils import month_to_season, print_header
 from ninolearn.pathes import modeldir, infodir
 from ninolearn.learn.models.dem import DEM
 from ninolearn.learn.fit import decades
@@ -15,7 +15,6 @@ from ninolearn.learn.fit import decades
 from s0_start import start_pred_y, start_pred_m
 
 
-#%%
 # =============================================================================
 # Getting feature vector
 # =============================================================================
@@ -25,13 +24,14 @@ X = np.load(join(infodir,'features.npy'))
 X = X[-1:,:] # now use only the latest observation to produce forecast
 
 
-#%%
 # =============================================================================
 # For each lead time, load ensemble of models and make prediction
 # =============================================================================
 
 lead_times = np.load(join(infodir,'lead_times.npy'))
 predictions = np.zeros((2,len(lead_times))) # first row: mean, second row: std
+
+print_header("Making predictions")
 
 for i in np.arange(len(lead_times)):
     print("Lead time "+str(lead_times[i])+" months")
@@ -48,10 +48,12 @@ for i in np.arange(len(lead_times)):
     predictions[0,i] = pred[0][0] # mean
     predictions[1,i] = pred[1][0] # std
 
-#%%
+
 # =============================================================================
 # Take 3-month averages and save predictions
 # =============================================================================
+
+print_header("Computing seasonal averages")
 
 # Moving average with window of 3 months
 pred_seasons_mean = uniform_filter1d(predictions[0,:], size=3)
@@ -74,5 +76,5 @@ else:
     filename = 'predictions_'+str(start_pred_y)+'_'+str(start_pred_m)+'.csv'
 df.to_csv(filename)
 
-
+print("Predictions saved!")
 

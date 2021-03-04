@@ -7,9 +7,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from os.path import join
-from ninolearn.pathes import infodir
-from ninolearn.utils import num_to_month
-from s0_start import start_pred_y, start_pred_m
+from datetime import datetime
+from ninolearn.pathes import infodir, processeddir
+from ninolearn.utils import num_to_month, month_to_season
+from s0_start import start_pred_y, start_pred_m, current_year, current_month
 
 # =============================================================================
 # Loading the predictions
@@ -28,12 +29,10 @@ std_upper = mean + std
 std_lower = mean - std
 
 
-
 # =============================================================================
-# Plotting the prediction
+# Plotting the predictions
 # =============================================================================
 
-# TODO: also include last observation (as in IRI plume)
 plt.figure()
 plt.plot(lead_times, np.zeros(len(lead_times)),'k')
 plt.plot(lead_times,mean, 'b')
@@ -43,7 +42,30 @@ plt.plot(lead_times, std_lower, '--b')
 plt.fill_between(lead_times, std_lower, std_upper, facecolor='b', alpha=0.2)
 plt.grid(True)
 plt.ylabel('Nino3.4 SST anomaly ($^\circ$C)')
-plt.xticks(lead_times, seasons)
 plt.title('Model predictions of ENSO from '+str(num_to_month(start_pred_m))+' '+str(start_pred_y))
+#plt.xticks(lead_times, seasons)
 
+
+# If the ONI observation from the previous month is available, plot it as well
+oni_obs = pd.read_csv(join(processeddir, 'oni.csv'))
+last_date_str = oni_obs.iloc[-1]['time']
+last_date = datetime.strptime(last_date_str,'%Y-%m-%d %H:%M:%S')
+plot_obs = False
+# TODO: deze if kan mooier!
+if current_month > 1:
+    if last_date.year == current_year and last_date.month == current_month-1: 
+        plot_obs = True
+else:
+    if last_date.year == current_year-1 and last_date.month == 12:
+        plot_obs = True
+if plot_obs:
+    last_obs = oni_obs.iloc[-1]['anom']
+    plt.scatter(lead_times[0]-2,last_obs)
+    plt.plot([lead_times[0]-2, lead_times[0]], [last_obs, mean[0]], ':k')
+    tick1 = num_to_month(last_date.month)
+    tick2 = month_to_season(last_date.month)
+    ticklabels = np.hstack((tick1,tick2,seasons))
+    plt.xticks(np.arange(lead_times[0]-2,lead_times[-1]+1), ticklabels)
+else:
+    plt.xticks(lead_times, seasons)
 

@@ -1,5 +1,5 @@
 """
-STEP 6: FINISH
+STEP 5: FINISH
 Remove the directories and files with (raw and processed) data, trained models,
 and information saved in between.
 Next month you can have a fresh start!
