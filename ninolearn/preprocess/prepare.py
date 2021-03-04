@@ -249,6 +249,7 @@ def prep_other_forecasts():
     """
     Get other forecasts into a decent format.
     """
+    print("Prepare other forecasts.")
     data = read_raw.other_forecasts()
 
     n_rows = len(data)

@@ -63,6 +63,7 @@ pred_seasons_std = pred_seasons_std[1:-1]
 seasons = np.empty(len(pred_seasons_mean), dtype=object)
 for i in np.arange(len(pred_seasons_mean)):
     seasons[i] = month_to_season(start_pred_m+i)
+np.save(join(infodir,'seasons'), seasons)
 
 # Save predictions as DataFrame
 df = pd.DataFrame({'Mean': pred_seasons_mean, 'STD': pred_seasons_std}, index = seasons)
@@ -72,4 +73,6 @@ if start_pred_m < 10:
 else:
     filename = 'predictions_'+str(start_pred_y)+'_'+str(start_pred_m)+'.csv'
 df.to_csv(filename)
+
+
 

@@ -85,6 +85,25 @@ def month_to_season(month):
                 12: 'NDJ'}
     return switcher[month]
 
+def num_to_month(num):
+    """
+    Translates an integer between 1 and 12 to a string with the 3-letter
+    abbreviation of the corresponding month.
+    """
+    switcher = {1: 'Jan',
+                2: 'Feb',
+                3: 'Mar',
+                4: 'Apr',
+                5: 'May',
+                6: 'Jun',
+                7: 'Jul',
+                8: 'Aug',
+                9: 'Sep',
+                10: 'Oct',
+                11: 'Nov',
+                12: 'Dec'}
+    return switcher[num]
+
 
 """
 here I want to implement the code for the MLP regression and classification
