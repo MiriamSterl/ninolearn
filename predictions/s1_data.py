@@ -127,7 +127,6 @@ latest = min(oni_end,wwv_end,dmi_end,taux_end)
  
 # Check if end of observations is before start of predictions.
 # If not, take current month+year as enddate.
-# TODO: denk na of deze malle check wel nodig is. (nu je de huidige maand invult)
 if latest < datetime.datetime(start_pred_y, start_pred_m,1,0,0): 
     endyr = str(latest.year)
     endmth = str(latest.month)
