@@ -9,12 +9,12 @@ the observations is determined.
 from s0_start import basedir
 import sys  
 sys.path.append(basedir)
-#%%
+
 # =============================================================================
 # Create relevant data directories
 # =============================================================================
 
-from ninolearn.pathes import rawdir, processeddir, modeldir, infodir, basedir
+from ninolearn.pathes import rawdir, processeddir, modeldir, infodir, basedir, preddir
 from os.path import join, exists
 from os import mkdir
 
@@ -33,6 +33,10 @@ if not exists(modeldir):
 if not exists(infodir):
     print("Make a data directory at %s" % infodir)
     mkdir(infodir)
+    
+if not exists(preddir):
+    print("Make a data directory at %s" % preddir)
+    mkdir(preddir)
 
 
 # =============================================================================

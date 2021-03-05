@@ -2,6 +2,9 @@
 STEP 2: CROSS TRAINING
 The GDNN models are trained.
 """
+from s0_start import basedir
+import sys  
+sys.path.append(basedir)
 
 import numpy as np
 from sklearn.preprocessing import StandardScaler

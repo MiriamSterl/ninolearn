@@ -2,13 +2,17 @@
 STEP 3: PREDICT
 The GDNN models are used to make predictions.
 """
+from s0_start import basedir
+import sys  
+sys.path.append(basedir)
+
 import numpy as np
 import pandas as pd
 from scipy.ndimage.filters import uniform_filter1d
 from os.path import join
 
 from ninolearn.utils import month_to_season, print_header
-from ninolearn.pathes import modeldir, infodir
+from ninolearn.pathes import modeldir, infodir, preddir
 from ninolearn.learn.models.dem import DEM
 from ninolearn.learn.fit import decades
 
@@ -74,7 +78,7 @@ if start_pred_m < 10:
     filename = 'predictions_'+str(start_pred_y)+'_0'+str(start_pred_m)+'.csv'
 else:
     filename = 'predictions_'+str(start_pred_y)+'_'+str(start_pred_m)+'.csv'
-df.to_csv(filename)
+df.to_csv(join(preddir,filename))
 
 print("Predictions saved!")
 

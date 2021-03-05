@@ -2,13 +2,16 @@
 STEP 4: PLOT [OPTIONAL]
 Plotting the predictions.
 """
+from s0_start import basedir
+import sys  
+sys.path.append(basedir)
 
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from os.path import join
 from datetime import datetime
-from ninolearn.pathes import infodir, processeddir
+from ninolearn.pathes import infodir, processeddir, preddir
 from ninolearn.utils import num_to_month, month_to_season
 from s0_start import start_pred_y, start_pred_m, current_year, current_month
 
@@ -21,7 +24,7 @@ if start_pred_m < 10:
     filename = 'predictions_'+str(start_pred_y)+'_0'+str(start_pred_m)
 else:
     filename = 'predictions_'+str(start_pred_y)+'_'+str(start_pred_m)
-predictions = pd.read_csv(filename+'.csv', index_col=0)
+predictions = pd.read_csv(join(preddir,filename+'.csv'), index_col=0)
 seasons = predictions.index.values
 mean = predictions['Mean'].values
 std = predictions['STD'].values
@@ -69,7 +72,7 @@ if plot_obs:
 else:
     plt.xticks(lead_times, seasons)
 
-plt.savefig(filename+'.png')
+plt.savefig(join(preddir,filename+'.png'))
 
 
 print("Step 4 finished, continue to step 5!")
