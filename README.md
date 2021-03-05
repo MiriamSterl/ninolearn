@@ -22,6 +22,8 @@ Moreover, it contains models for the ENSO forecasting:
 
 For the full code and documentation, see https://pjpetersik.github.io/ninolearn/intro.html and https://github.com/pjpetersik/ninolearn.
 
+This fork of the original code contains code to produce ENSO forecasts using Gaussian Density Neural Network (GDNN) models.
+
 ## How to use this repository for creating ENSO predictions
 
 1. Clone the repository to your local machine.
