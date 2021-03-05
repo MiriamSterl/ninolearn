@@ -20,33 +20,18 @@ Moreover, it contains models for the ENSO forecasting:
 
 · Encoder-Decoder Ensemble Model
 
-For the full code and documentation, see \url{https://pjpetersik.github.io/ninolearn/intro.html} and \url{https://github.com/pjpetersik/ninolearn}.
+For the full code and documentation, see https://pjpetersik.github.io/ninolearn/intro.html and https://github.com/pjpetersik/ninolearn.
 
-## Installation for own development
+## How to use this repository for creating ENSO predictions
 
-1. Fork the repository.
-2. Clone the repository to your local machine.
+1. Clone the repository to your local machine.
 ```
 git clone https://github.com/Your_Username/ninolearn
 ```
-3. Make a conda environment from the .yml file.
-```
-conda env create -f ninolearn.yml
-```
-4. Activate the environment.
-```
-conda activate ninolearn
-```
-5.  Add ninolearn to the conda environment in 'development mode'.
-```
-conda develop /path/to/ninolearn
-```
-6. Fill out the `ninolearn/private_template.py` file with the required pathes and save a copy as `private.py`. The `private.py` will not be pushed to your remote repository because it contain sensitive information as well as pathes that are specific to your machine.
+2. Go to the `predictions` folder. In the file `s0_start.py`, fill in the required paths as well as the current year and month.
+3. Run the files in the `predictions` folder in the order of their number.
 
-Now you should be ready to use ninolearn. For the beginning you can try to run the Jupyter Notebook tutorials which are currently located in `docs-sphinx/source/jupyter_notebook_tutorials/`. 
 
 ## Folder structure
 In the folder `ninolearn` the actual ninolearn code is located. 
-The `research` folder contains pervious research that was done with ninolearn. Hence, if you want to do your own research with ninolearn, make a new directory in the research folder in which you can start to do your own stuff.
-
-The folders `docs` and `docs-sphinx` contain the documentation of ninolearn. Currently the documentation is somewhat outdated.
+The `predictions` folder contains the code needed to create ENSO forecasts.
