@@ -9,12 +9,21 @@ from s0_start import basedir
 import sys  
 sys.path.append(basedir)
 
-import os
+import shutil
+from os.path import exists
 from ninolearn.pathes import rawdir, processeddir, modeldir, infodir
 
-os.remove(rawdir)
-os.remove(processeddir)
-os.remove(modeldir)
-os.remove(infodir)
 
-print("Done!")
+def remove_dir(dir_name):
+    if exists(dir_name):
+        shutil.rmtree(dir_name)
+        print('%s removed' % dir_name)
+    else:
+        print('%s is already removed' % dir_name)
+
+remove_dir(rawdir)
+remove_dir(processeddir)
+remove_dir(modeldir)
+remove_dir(infodir)
+
+print("\nDone!")

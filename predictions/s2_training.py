@@ -125,4 +125,4 @@ if __name__=="__main__":
                    activation='tanh',
                    verbose=0, pdf="normal", name="gdnn_ex_pca")
     
-print("\n \n Step 2 finished, continue to step 3!")
+print("\n \nStep 2 finished, continue to step 3!")

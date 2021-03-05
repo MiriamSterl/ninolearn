@@ -82,4 +82,4 @@ df.to_csv(join(preddir,filename))
 
 print("Predictions saved!")
 
-print("\n Step 3 finished, continue to step 4 or step 5!")
+print("\nStep 3 finished, continue to step 4 or step 5!")
