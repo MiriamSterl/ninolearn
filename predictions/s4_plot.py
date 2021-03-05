@@ -39,14 +39,13 @@ std_lower = mean - std
 plt.figure()
 plt.plot(lead_times, np.zeros(len(lead_times)),'k')
 plt.plot(lead_times,mean, 'b')
-plt.plot(lead_times,mean, 'ob')
+plt.plot(lead_times,mean, 'ob', zorder=3)
 plt.plot(lead_times, std_upper, '--b')
 plt.plot(lead_times, std_lower, '--b')
 plt.fill_between(lead_times, std_lower, std_upper, facecolor='b', alpha=0.2)
 plt.grid(True)
 plt.ylabel('Nino3.4 SST anomaly ($^\circ$C)')
 plt.title('Model predictions of ENSO from '+str(num_to_month(start_pred_m))+' '+str(start_pred_y))
-#plt.xticks(lead_times, seasons)
 
 
 # If the ONI observation from the previous month is available, plot it as well
@@ -64,7 +63,7 @@ else:
 if plot_obs:
     last_obs = oni_obs.iloc[-1]['anom']
     plt.plot([lead_times[0]-2, lead_times[0]], [last_obs, mean[0]], ':k')
-    plt.scatter(lead_times[0]-2,last_obs, color='b')
+    plt.scatter(lead_times[0]-2,last_obs, color='b', zorder=3)
     tick1 = num_to_month(last_date.month)
     tick2 = month_to_season(last_date.month)
     ticklabels = np.hstack((tick1,tick2,seasons))
