@@ -14,11 +14,7 @@ It contains methods for downloading relevant data from their sources, reading
 raw data, postprocessing it and then access the postprocessed data in an easy way. 
 
 
-Moreover, it contains models for the ENSO forecasting:
-
-· Deep Ensemble Model (DEM)
-
-· Encoder-Decoder Ensemble Model
+Moreover, it contains models for ENSO forecasting.
 
 For the full code and documentation, see https://pjpetersik.github.io/ninolearn/intro.html and https://github.com/pjpetersik/ninolearn.
 
