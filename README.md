@@ -29,6 +29,7 @@ git clone https://github.com/Your_Username/ninolearn
 2. Go to the `predictions` folder. In the file `s0_start.py`, fill in the required paths as well as the current year and month.
 3. Run the files in the `predictions` folder in the order of their number.
 
+More detailed information can be found in the manual (`Manual.pdf`).
 
 ## Folder structure
 In the folder `ninolearn` the actual ninolearn code is located. 
