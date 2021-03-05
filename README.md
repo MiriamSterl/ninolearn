@@ -1,4 +1,4 @@
-# NinoLearn
+# NinoLearn: predictions
 
 <img src="https://github.com/pjpetersik/ninolearn/blob/master/logo/logo.png" width="250" align="right">
 
@@ -19,6 +19,8 @@ Moreover, it contains models for the ENSO forecasting:
 · Deep Ensemble Model (DEM)
 
 · Encoder-Decoder Ensemble Model
+
+For the full code and documentation, see \url{https://pjpetersik.github.io/ninolearn/intro.html} and \url{https://github.com/pjpetersik/ninolearn}.
 
 ## Installation for own development
 
