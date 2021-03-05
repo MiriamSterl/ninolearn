@@ -9,13 +9,12 @@ Do not commit this file to your public repository!
 # =============================================================================
 
 # directories
-basedir = "" # full path to the root directory of the ninolearn package
+basedir = "" # full path to the root directory of the ninolearn folder
 datadir = "" # full path to the directory where you want to save data
 
 # the current month (1-12) and year, as int
 current_month = 0
 current_year = 0
-
 
 # =============================================================================
 # Determining start of prediction period
