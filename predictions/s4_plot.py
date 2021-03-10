@@ -77,6 +77,7 @@ else:
     plt.xticks(lead_times, seasons, fontsize=10)
 
 plt.savefig(join(preddir,filename+'.png'))
+plt.savefig(join(preddir,filename+'.pdf'))
 
 
 print("Step 4 finished, continue to step 5!")
