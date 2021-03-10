@@ -80,6 +80,8 @@ obs_index = oni_obs.loc[oni_obs['time']==obs_date].index
 if len(obs_index)==1:
     last_obs = oni_obs.iloc[obs_index]['anom']
     plt.plot([lead_times[0]-2, lead_times[0]], [last_obs, mean[0]], ':k')
+    for i in np.arange(0,26):
+        plt.plot([lead_times[0]-2, lead_times[0]], [last_obs,forecasts[i,0]], ':k', alpha=0.5)
     plt.scatter(lead_times[0]-2,last_obs, color='k', zorder=3)
     plt.xlim(lead_times[0]-2,lead_times[-1])
     tick1 = num_to_month(obs_month)
@@ -93,5 +95,5 @@ else:
     plt.xticks(lead_times, seasons, fontsize=10)
 
 
-#plt.savefig(join(preddir,filename+'_IRI.png'))
-#plt.savefig(join(preddir,filename+'_IRI.pdf'))
+plt.savefig(join(preddir,filename+'_IRI.png'))
+plt.savefig(join(preddir,filename+'_IRI.pdf'))
