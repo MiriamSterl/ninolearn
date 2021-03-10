@@ -50,24 +50,54 @@ plt.title('Model predictions of ENSO from '+str(num_to_month(current_month))+' '
 
 
 # If the ONI observation from the previous month is available, plot it as well
+# oni_obs = pd.read_csv(join(processeddir, 'oni.csv'))
+# last_date_str = oni_obs.iloc[-1]['time']
+# last_date = datetime.strptime(last_date_str,'%Y-%m-%d %H:%M:%S')
+# plot_obs = False
+# # TODO: deze if kan mooier!
+# if current_month > 1:
+#     if last_date.year == current_year and last_date.month == current_month-1: 
+#         plot_obs = True
+# else:
+#     if last_date.year == current_year-1 and last_date.month == 12:
+#         plot_obs = True
+# if plot_obs:
+#     last_obs = oni_obs.iloc[-1]['anom']
+#     plt.plot([lead_times[0]-2, lead_times[0]], [last_obs, mean[0]], ':k')
+#     plt.scatter(lead_times[0]-2,last_obs, color='k', zorder=3)
+#     plt.xlim(lead_times[0]-2,lead_times[-1])
+#     tick1 = num_to_month(last_date.month)
+#     tick2 = month_to_season(last_date.month)
+#     ticklabels = np.hstack((tick1,tick2,seasons))
+#     plt.xticks(np.arange(lead_times[0]-2,lead_times[-1]+1), ticklabels, fontsize=10)
+#     plt.text(lead_times[0]-1.9,plt.gca().get_ylim()[0]+0.1,"OBSERVED",fontsize=10,fontfamily='serif')
+#     plt.text(lead_times[0]+0.1,plt.gca().get_ylim()[0]+0.1,"FORECAST",fontsize=10,fontfamily='serif')
+# else:
+#     plt.xlim(lead_times[0], lead_times[-1])
+#     plt.xticks(lead_times, seasons, fontsize=10)
+
+
 oni_obs = pd.read_csv(join(processeddir, 'oni.csv'))
-last_date_str = oni_obs.iloc[-1]['time']
-last_date = datetime.strptime(last_date_str,'%Y-%m-%d %H:%M:%S')
-plot_obs = False
-# TODO: deze if kan mooier!
 if current_month > 1:
-    if last_date.year == current_year and last_date.month == current_month-1: 
-        plot_obs = True
+    obs_year = current_year
+    obs_month = current_month - 1
 else:
-    if last_date.year == current_year-1 and last_date.month == 12:
-        plot_obs = True
-if plot_obs:
-    last_obs = oni_obs.iloc[-1]['anom']
+    obs_year = current_year - 1
+    obs_month = 12
+
+if obs_month < 10:
+    obs_date = str(obs_year)+'-0'+str(obs_month)+'-01 00:00:00'
+else:
+   obs_date = str(obs_year)+'-'+str(obs_month)+'-01 00:00:00' 
+   
+obs_index = oni_obs.loc[oni_obs['time']==obs_date].index
+if len(obs_index)==1:
+    last_obs = oni_obs.iloc[obs_index]['anom']
     plt.plot([lead_times[0]-2, lead_times[0]], [last_obs, mean[0]], ':k')
     plt.scatter(lead_times[0]-2,last_obs, color='k', zorder=3)
     plt.xlim(lead_times[0]-2,lead_times[-1])
-    tick1 = num_to_month(last_date.month)
-    tick2 = month_to_season(last_date.month)
+    tick1 = num_to_month(obs_month)
+    tick2 = month_to_season(obs_month)
     ticklabels = np.hstack((tick1,tick2,seasons))
     plt.xticks(np.arange(lead_times[0]-2,lead_times[-1]+1), ticklabels, fontsize=10)
     plt.text(lead_times[0]-1.9,plt.gca().get_ylim()[0]+0.1,"OBSERVED",fontsize=10,fontfamily='serif')
@@ -75,6 +105,7 @@ if plot_obs:
 else:
     plt.xlim(lead_times[0], lead_times[-1])
     plt.xticks(lead_times, seasons, fontsize=10)
+
 
 plt.savefig(join(preddir,filename+'.png'))
 plt.savefig(join(preddir,filename+'.pdf'))
