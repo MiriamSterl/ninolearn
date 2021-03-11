@@ -65,7 +65,6 @@ def pipeline(lead_time, return_persistance=False):
     # indices
     oni = reader.read_csv('oni')
     dmi = reader.read_csv('dmi')
-    #iod = reader.read_csv('iod')
     wwv = reader.read_csv('wwv_proxy')
 
     # seasonal cycle
@@ -96,7 +95,7 @@ def pipeline(lead_time, return_persistance=False):
     # scale each feature
     scalerX = StandardScaler()
     Xorg = scalerX.fit_transform(feature_unscaled)
-    #dump(scalerX, open('scalerX.pkl', 'wb'))
+    #dump(scalerX, open(join(infodir,'scalerX.pkl'), 'wb'))
 
     # set nans to 0.
     Xorg = np.nan_to_num(Xorg)
