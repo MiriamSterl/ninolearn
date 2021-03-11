@@ -56,6 +56,7 @@ download(sources.WWV)
 download(sources.KINDEX)
 download(sources.UWIND_NCEP)
 download(sources.VWIND_NCEP)
+download(sources.otherForecasts)
 
 
 
@@ -63,7 +64,10 @@ download(sources.VWIND_NCEP)
 # Prepare the indices
 # =============================================================================
 from ninolearn.preprocess.prepare import prep_oni, prep_wwv, prep_dmi, prep_K_index, prep_wwv_proxy
+from ninolearn.preprocess.prepare import prep_other_forecasts
 from ninolearn.pathes import processeddir, infodir
+from ninolearn.utils import num_to_month
+from s0_start import start_pred_y, start_pred_m
 
 print_header("Prepare Data")
 
@@ -72,6 +76,7 @@ prep_wwv()
 prep_dmi()
 prep_K_index()
 prep_wwv_proxy()
+prep_other_forecasts(num_to_month(start_pred_m),str(start_pred_y))
 
 
 # =============================================================================
@@ -108,14 +113,13 @@ taux.attrs['units'] = 'm^2/s^2'
 postprocess(taux)
 
 
+
 # =============================================================================
 # Determine earliest enddate that is in all datasets to be used for training
 # =============================================================================
 import pandas as pd
 import xarray as xr
 import datetime
-from s0_start import start_pred_y, start_pred_m
-
 
 oni = pd.read_csv(join(processeddir,'oni.csv'),index_col=0, parse_dates=True)
 wwv = pd.read_csv(join(processeddir,'wwv_proxy.csv'),index_col=0, parse_dates=True)
@@ -152,43 +156,5 @@ f.write("\n")
 f.write(endmth)
 f.close()
 
-
-# =============================================================================
-# Download IRI/CPC forecast data for the desired period
-# =============================================================================
-#%%
-from ninolearn.utils import num_to_month
-
-download(sources.otherForecasts)
-IRICPC = []
-
-month = num_to_month(start_pred_m)
-year = str(start_pred_y)
-
-f = open(join(rawdir,"other_forecasts.txt"), "r")
-go = True
-while go:
-    line = f.readline()
-    if line == 'Forecast issued '+month+' '+year+'\n':
-        go = False
-        f.readline() # first/last month info
-        f.readline() # last obs info
-        read_forecast = True
-        while read_forecast:
-            line = f.readline()
-            if line == 'end\n' or line == '\n':
-                read_forecast = False
-                break
-            fc = np.zeros(9) # forecasts are made for 9-month lead times
-            for i in range(9):
-                fc[i] = float(line[4*i:4*(i+1)])*0.01
-                fc = np.where(fc==-9.99, np.nan, fc)
-            IRICPC.append(fc)
-        print('IRI/CPC forecasts saved')    
-    if not line:
-        print('IRI/CPC forecast not found for desired period')
-        break
-f.close()
-np.save(join(processeddir,'IRICPC'), IRICPC)
 
 print("Step 1 finished, continue to step 2!")

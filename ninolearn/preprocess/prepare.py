@@ -245,82 +245,34 @@ def calc_warm_pool_edge():
     df.to_csv(join(processeddir, 'wp_edge.csv'))
 
 
-def prep_other_forecasts():
+def prep_other_forecasts(month,year):
     """
-    Get other forecasts into a decent format.
+    Extract IRI/CPC forecast for desired period
     """
-    print("Prepare other forecasts.")
-    data = read_raw.other_forecasts()
-
-    n_rows = len(data)
-
-    # the first target season is assumed not to change
-    first_target_season = '2002-04-01'
-
-    for i in reversed(range(n_rows)):
-        row_str = data.row[i]
-        if row_str[:8] == "Forecast":
-            last_issued =datetime.strptime(row_str[16:], '%b %Y')
+    IRICPC = []
+    f = open(join(rawdir,"other_forecasts.txt"), "r")
+    go = True
+    while go:
+        line = f.readline()
+        if line == 'Forecast issued '+month+' '+year+'\n':
+            go = False
+            f.readline() # first/last month info
+            f.readline() # last obs info
+            read_forecast = True
+            while read_forecast:
+                line = f.readline()
+                if line == 'end\n' or line == '\n':
+                    read_forecast = False
+                    break
+                fc = np.zeros(9) # forecasts are made for 9-month lead times
+                for i in range(9):
+                    fc[i] = float(line[4*i:4*(i+1)])*0.01
+                    fc = np.where(fc==-9.99, np.nan, fc)
+                IRICPC.append(fc)
+            print('IRI/CPC forecasts saved')    
+        if not line:
+            print('IRI/CPC forecast not found for desired period')
             break
+    f.close()
+    np.save(join(processeddir,'IRICPC'), IRICPC)
 
-    last_target_season = last_issued + pd.tseries.offsets.MonthBegin(10)
-
-    target_season = pd.date_range(start=first_target_season, end=last_target_season, freq='MS')
-
-    n_timesteps = len(target_season)
-
-    lead_time = np.arange(0, 9)
-    n_lead = len(lead_time)
-
-    # dummy array for the purpose to be filled
-    dummy = np.zeros((n_timesteps, n_lead))
-    dummy[:,:] = np.nan
-
-    j = 0
-    save_data = {}
-    for i in range(n_rows):
-        try:
-            # read the row
-            row_str = data.row[i]
-
-            # check if it is the last line of a forecast block
-            if row_str[:3]=='end':
-                j+=1
-
-            # check if it is a number otherwise go the except
-            test = int(row_str[0:4])
-
-            # allocate a new entry if model is new
-            model_name = row_str[40:52].strip()
-            if model_name not in save_data.keys() and model_name!='':
-                save_data[model_name] =  dummy.copy()
-
-            # write data to the considered target period
-            for k in range(9):
-                save_data[model_name][j+k, k] = int(row_str[0+k*4: 4+k*4])
-
-        except ValueError:
-            pass
-
-
-    # make the final save dictionary
-    save_dict = {}
-
-    # replace model names that have a '/'  in their name (otherwise saving as
-    # netCDF would not be possible)
-    for key in save_data.keys():
-        key_save = key.replace('/', ' ')
-        save_dict[key_save] = (['target_season', 'lead'], save_data[key])
-
-    # maka the final Data set
-    ds = xr.Dataset(save_dict, coords={'target_season': target_season,
-                                        'lead': lead_time })
-
-    # replace -999 with nans
-    ds=ds.where(ds!=-999)
-
-    # from unit cK to K
-    ds = ds/100
-
-    # save data
-    ds.to_netcdf(join(processeddir, f'other_forecasts.nc'))
