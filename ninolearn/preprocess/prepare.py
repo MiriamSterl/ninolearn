@@ -11,10 +11,8 @@ from datetime import datetime
 import xarray as xr
 
 from ninolearn.IO import read_raw
-from ninolearn.pathes import processeddir
+from ninolearn.pathes import rawdir, processeddir, preddir
 from ninolearn.IO.read_processed import data_reader
-
-from ninolearn.pathes import rawdir
 
 
 if not exists(processeddir):
@@ -274,5 +272,6 @@ def prep_other_forecasts(month,year):
             print('IRI/CPC forecast not found for desired period')
             break
     f.close()
-    np.save(join(processeddir,'IRICPC'), IRICPC)
+    #np.save(join(processeddir,'IRICPC'), IRICPC)
+    return IRICPC
 

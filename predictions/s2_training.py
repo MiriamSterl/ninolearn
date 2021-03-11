@@ -9,7 +9,7 @@ sys.path.append(basedir)
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from os.path import join
-from pickle import dump
+#from pickle import dump
 
 from ninolearn.utils import include_time_lag
 from ninolearn.IO.read_processed import data_reader

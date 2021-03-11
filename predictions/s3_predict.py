@@ -12,7 +12,7 @@ from scipy.ndimage.filters import uniform_filter1d
 from os.path import join
 #from pickle import load
 
-from ninolearn.utils import month_to_season_first, print_header, include_time_lag
+from ninolearn.utils import month_to_season_first, print_header, include_time_lag, pred_filename
 from ninolearn.pathes import modeldir, infodir, preddir
 from ninolearn.learn.models.dem import DEM
 from ninolearn.learn.fit import decades
@@ -80,11 +80,8 @@ np.save(join(infodir,'seasons'), seasons)
 # Save predictions as DataFrame
 df = pd.DataFrame({'Mean': pred_seasons_mean, 'STD': pred_seasons_std}, index = seasons)
 df.index.name = 'Season'
-if start_pred_m < 10:
-    filename = 'predictions_'+str(start_pred_y)+'_0'+str(start_pred_m)+'.csv'
-else:
-    filename = 'predictions_'+str(start_pred_y)+'_'+str(start_pred_m)+'.csv'
-df.to_csv(join(preddir,filename))
+fn = pred_filename(start_pred_y, start_pred_m)+'_ninolearn.csv'
+df.to_csv(join(preddir,fn))
 
 print("Predictions saved!")
 

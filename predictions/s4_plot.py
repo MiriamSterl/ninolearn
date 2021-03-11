@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from os.path import join
 from ninolearn.pathes import infodir, processeddir, preddir
-from ninolearn.utils import num_to_month, month_to_season_last
+from ninolearn.utils import num_to_month, month_to_season_last, pred_filename
 from s0_start import start_pred_y, start_pred_m
 
 # =============================================================================
@@ -19,11 +19,8 @@ from s0_start import start_pred_y, start_pred_m
 # =============================================================================
 
 lead_times = np.load(join(infodir,'lead_times.npy'))[:-2]
-if start_pred_m < 10:
-    filename = 'predictions_'+str(start_pred_y)+'_0'+str(start_pred_m)
-else:
-    filename = 'predictions_'+str(start_pred_y)+'_'+str(start_pred_m)
-predictions = pd.read_csv(join(preddir,filename+'.csv'), index_col=0)
+fn = pred_filename(start_pred_y, start_pred_m)+'_ninolearn.csv'
+predictions = pd.read_csv(join(preddir,fn+'_ninolearn.csv'), index_col=0)
 seasons = predictions.index.values
 mean = predictions['Mean'].values
 std = predictions['STD'].values
@@ -31,7 +28,7 @@ std_upper = mean + std
 std_lower = mean - std
 
 # Load IRI/CPC forecasts to plot along for comparison
-IRICPC = np.load(join(processeddir,'IRICPC.npy'))
+IRICPC = np.load(join(preddir,fn+'_iricpc.txt'))
 if len(IRICPC)>0:
     plot_iricpc = True
 
@@ -95,8 +92,8 @@ else:
     plt.plot(lead_times, np.zeros(len(lead_times)),'k')
 
 
-plt.savefig(join(preddir,filename+'.png'))
-plt.savefig(join(preddir,filename+'.pdf'))
+plt.savefig(join(preddir,fn+'.png'))
+plt.savefig(join(preddir,fn+'.pdf'))
 
 
 print("Step 4 finished, continue to step 5!")

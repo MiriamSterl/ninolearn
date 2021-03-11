@@ -125,6 +125,14 @@ def num_to_month(num):
     return switcher[num]
 
 
+def pred_filename(year, month):
+    if month < 10:
+        filename = 'predictions_'+str(year)+'_0'+str(month)
+    else:
+        filename = 'predictions_'+str(year)+'_'+str(month)
+    return filename
+
+
 """
 here I want to implement the code for the MLP regression and classification
 """
