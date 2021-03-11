@@ -112,7 +112,7 @@ postprocess(taux)
 import pandas as pd
 import xarray as xr
 import datetime
-from s0_start import current_year, current_month, start_pred_y, start_pred_m
+from s0_start import start_pred_y, start_pred_m
 
 
 oni = pd.read_csv(join(processeddir,'oni.csv'),index_col=0, parse_dates=True)
@@ -130,13 +130,19 @@ taux_end = pd.Timestamp(taux.time.values[-1])
 latest = min(oni_end,wwv_end,dmi_end,taux_end)
  
 # Check if end of observations is before start of predictions.
-# If not, take current month+year as enddate.
+# If not, take last date before start of prediction as enddate.
 if latest < datetime.datetime(start_pred_y, start_pred_m,1,0,0): 
     endyr = str(latest.year)
     endmth = str(latest.month)
 else:
-    endyr = str(current_year)
-    endmth = str(current_month)
+    if start_pred_m > 1:
+        endyr = str(start_pred_y)
+        endmth = str(start_pred_m-1)
+    else:
+        endyr = str(start_pred_y-1)
+        endmth = str(12)
+    #endyr = str(current_year)
+    #endmth = str(current_month)
 
 # Save enddate of observations to be used
 print_header("Saving enddate of observations")

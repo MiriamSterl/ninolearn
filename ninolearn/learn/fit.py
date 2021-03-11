@@ -13,8 +13,8 @@ from ninolearn.pathes import modeldir, processeddir
 
 
 # evaluation decades
-from s0_start import current_year
-decades= np.hstack(([1963], np.arange(1972,current_year,10),[current_year])) 
+from s0_start import start_pred_y
+decades= np.hstack(([1963], np.arange(1972,start_pred_y,10),[start_pred_y])) 
 decades_elninolike = []
 
 n_decades = len(decades)

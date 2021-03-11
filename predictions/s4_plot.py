@@ -13,7 +13,7 @@ from os.path import join
 from datetime import datetime
 from ninolearn.pathes import infodir, processeddir, preddir
 from ninolearn.utils import num_to_month, month_to_season
-from s0_start import start_pred_y, start_pred_m, current_year, current_month
+from s0_start import start_pred_y, start_pred_m
 
 # =============================================================================
 # Loading the predictions
@@ -46,7 +46,7 @@ plt.fill_between(lead_times, std_lower, std_upper, facecolor='b', alpha=0.2)
 plt.grid(True)
 plt.ylabel('Nino3.4 SST anomaly ($^\circ$C)',fontsize=11)
 plt.yticks(fontsize=10)
-plt.title('Model predictions of ENSO from '+str(num_to_month(current_month))+' '+str(current_year),fontsize=13)
+plt.title('Model predictions of ENSO from '+str(num_to_month(start_pred_m))+' '+str(start_pred_y),fontsize=13)
 
 
 # If the ONI observation from the previous month is available, plot it as well
@@ -77,12 +77,13 @@ plt.title('Model predictions of ENSO from '+str(num_to_month(current_month))+' '
 #     plt.xticks(lead_times, seasons, fontsize=10)
 
 
+# If the ONI observation from the previous month is available, plot it as well
 oni_obs = pd.read_csv(join(processeddir, 'oni.csv'))
-if current_month > 1:
-    obs_year = current_year
-    obs_month = current_month - 1
+if start_pred_m > 1:
+    obs_year = start_pred_y
+    obs_month = start_pred_m - 1
 else:
-    obs_year = current_year - 1
+    obs_year = start_pred_y - 1
     obs_month = 12
 
 if obs_month < 10:
