@@ -4,6 +4,8 @@ All data that is used to train the models is downloaded.
 The downloaded data needs to be prepared to have the similar time-axis.
 In addition, the wind stress field is computed, and the latest common date of 
 the observations is determined.
+Finally, the forecasts from IRI/CPC are downloaded and processed, so that
+our forecast can later be compared to them.
 """
 
 from s0_start import basedir
@@ -149,5 +151,44 @@ f.write(endyr)
 f.write("\n")
 f.write(endmth)
 f.close()
+
+
+# =============================================================================
+# Download IRI/CPC forecast data for the desired period
+# =============================================================================
+#%%
+from ninolearn.utils import num_to_month
+
+download(sources.otherForecasts)
+IRICPC = []
+
+month = num_to_month(start_pred_m)
+year = str(start_pred_y)
+
+f = open(join(rawdir,"other_forecasts.txt"), "r")
+go = True
+while go:
+    line = f.readline()
+    if line == 'Forecast issued '+month+' '+year+'\n':
+        go = False
+        f.readline() # first/last month info
+        f.readline() # last obs info
+        read_forecast = True
+        while read_forecast:
+            line = f.readline()
+            if line == 'end\n' or line == '\n':
+                read_forecast = False
+                break
+            fc = np.zeros(9) # forecasts are made for 9-month lead times
+            for i in range(9):
+                fc[i] = float(line[4*i:4*(i+1)])*0.01
+                fc = np.where(fc==-9.99, np.nan, fc)
+            IRICPC.append(fc)
+        print('IRI/CPC forecasts saved')    
+    if not line:
+        print('IRI/CPC forecast not found for desired period')
+        break
+f.close()
+np.save(join(processeddir,'IRICPC'), IRICPC)
 
 print("Step 1 finished, continue to step 2!")

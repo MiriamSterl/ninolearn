@@ -10,7 +10,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from os.path import join
-from datetime import datetime
 from ninolearn.pathes import infodir, processeddir, preddir
 from ninolearn.utils import num_to_month, month_to_season_last
 from s0_start import start_pred_y, start_pred_m
@@ -31,6 +30,11 @@ std = predictions['STD'].values
 std_upper = mean + std
 std_lower = mean - std
 
+# Load IRI/CPC forecasts to plot along for comparison
+IRICPC = np.load(join(processeddir,'IRICPC.npy'))
+if len(IRICPC)>0:
+    plot_iricpc = True
+
 
 # =============================================================================
 # Plotting the predictions
@@ -42,6 +46,10 @@ plt.plot(lead_times,mean, 'ob', zorder=3)
 plt.plot(lead_times, std_upper, '--b')
 plt.plot(lead_times, std_lower, '--b')
 plt.fill_between(lead_times, std_lower, std_upper, facecolor='b', alpha=0.2)
+if plot_iricpc:
+    for i in range(np.size(IRICPC,0)):
+        plt.plot(lead_times, IRICPC[i,:], color='grey', alpha=0.5)
+        plt.plot(lead_times, IRICPC[i,:], 'o', color='grey', alpha=0.5)
 plt.grid(True)
 plt.ylabel('Nino3.4 SST anomaly ($^\circ$C)',fontsize=11)
 plt.yticks(fontsize=10)
@@ -65,8 +73,11 @@ else:
 obs_index = oni_obs.loc[oni_obs['time']==obs_date].index
 if len(obs_index)==1:
     last_obs = oni_obs.iloc[obs_index]['anom']
-    plt.plot([lead_times[0]-2, lead_times[0]], [last_obs, mean[0]], ':k')
     plt.scatter(lead_times[0]-2,last_obs, color='k', zorder=3)
+    plt.plot([lead_times[0]-2, lead_times[0]], [last_obs, mean[0]], ':k')
+    if plot_iricpc:
+        for i in range(np.size(IRICPC,0)):
+            plt.plot([lead_times[0]-2, lead_times[0]], [last_obs,IRICPC[i,0]], ':k', alpha=0.5)
     plt.xlim(lead_times[0]-2,lead_times[-1])
     tick1 = month_to_season_last(obs_month)
     if obs_month < 12:
