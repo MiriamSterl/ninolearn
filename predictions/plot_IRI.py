@@ -11,7 +11,7 @@ import pandas as pd
 from os.path import join
 from datetime import datetime
 from ninolearn.pathes import infodir, processeddir, preddir
-from ninolearn.utils import num_to_month, month_to_season
+from ninolearn.utils import num_to_month, month_to_season_last
 from s0_start import start_pred_y, start_pred_m
 
 # =============================================================================
@@ -48,7 +48,6 @@ f.close()
 # =============================================================================
 
 plt.figure(figsize=(8,5))
-plt.plot(lead_times, np.zeros(len(lead_times)),'k')
 plt.plot(lead_times,mean, 'b')
 plt.plot(lead_times,mean, 'ob', zorder=3)
 plt.plot(lead_times, std_upper, '--b')
@@ -62,7 +61,7 @@ plt.ylabel('Nino3.4 SST anomaly ($^\circ$C)',fontsize=11)
 plt.yticks(fontsize=10)
 plt.title('Model predictions of ENSO from '+str(num_to_month(start_pred_m))+' '+str(start_pred_y),fontsize=13)
 
-
+# If available, plot the ONI observation from the last month before the prediction starts
 oni_obs = pd.read_csv(join(processeddir, 'oni.csv'))
 if start_pred_m > 1:
     obs_year = start_pred_y
@@ -84,15 +83,22 @@ if len(obs_index)==1:
         plt.plot([lead_times[0]-2, lead_times[0]], [last_obs,forecasts[i,0]], ':k', alpha=0.5)
     plt.scatter(lead_times[0]-2,last_obs, color='k', zorder=3)
     plt.xlim(lead_times[0]-2,lead_times[-1])
-    tick1 = num_to_month(obs_month)
-    tick2 = month_to_season(obs_month)
+    #tick1 = num_to_month(obs_month)
+    #tick2 = month_to_season(obs_month)
+    tick1 = month_to_season_last(obs_month)
+    if obs_month < 12:
+        tick2 = month_to_season_last(obs_month+1)
+    else:
+        tick2 = month_to_season_last(1)
     ticklabels = np.hstack((tick1,tick2,seasons))
     plt.xticks(np.arange(lead_times[0]-2,lead_times[-1]+1), ticklabels, fontsize=10)
     plt.text(lead_times[0]-1.9,plt.gca().get_ylim()[0]+0.1,"OBSERVED",fontsize=10,fontfamily='serif')
     plt.text(lead_times[0]+0.1,plt.gca().get_ylim()[0]+0.1,"FORECAST",fontsize=10,fontfamily='serif')
+    plt.plot(np.arange(lead_times[0]-2,lead_times[-1]+1), np.zeros(len(lead_times)+2),'k')
 else:
     plt.xlim(lead_times[0], lead_times[-1])
     plt.xticks(lead_times, seasons, fontsize=10)
+    plt.plot(lead_times, np.zeros(len(lead_times)),'k')
 
 
 plt.savefig(join(preddir,filename+'_IRI.png'))
