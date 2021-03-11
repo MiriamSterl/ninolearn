@@ -71,18 +71,18 @@ def month_to_season(month):
     Translates a month (int between 1 and 12) to a string denoting the 3-month
     period centered around the given month.
     """
-    switcher = {1: 'DJF',
-                2: 'JFM',
-                3: 'FMA',
-                4: 'MAM',
-                5: 'AMJ',
-                6: 'MJJ',
-                7: 'JJA',
-                8: 'JAS',
-                9: 'ASO',
-                10: 'SON',
-                11: 'OND',
-                12: 'NDJ'}
+    switcher = {1: 'JFM',
+                2: 'FMA',
+                3: 'MAM',
+                4: 'AMJ',
+                5: 'MJJ',
+                6: 'JJA',
+                7: 'JAS',
+                8: 'ASO',
+                9: 'SON',
+                10: 'OND',
+                11: 'NDJ',
+                12: 'DJF'}
     return switcher[month]
 
 def num_to_month(num):
