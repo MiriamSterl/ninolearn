@@ -50,6 +50,7 @@ print_header("Download Data")
 
 download(sources.ONI)
 download(sources.DMI)
+#download(sources.IOD)
 download(sources.WWV)
 download(sources.KINDEX)
 download(sources.UWIND_NCEP)
@@ -60,7 +61,7 @@ download(sources.VWIND_NCEP)
 # =============================================================================
 # Prepare the indices
 # =============================================================================
-from ninolearn.preprocess.prepare import prep_oni, prep_wwv, prep_dmi, prep_K_index, prep_wwv_proxy
+from ninolearn.preprocess.prepare import prep_oni, prep_wwv, prep_dmi, prep_K_index, prep_wwv_proxy, prep_iod
 from ninolearn.pathes import processeddir, infodir
 
 print_header("Prepare Data")
@@ -68,6 +69,7 @@ print_header("Prepare Data")
 prep_oni()
 prep_wwv()
 prep_dmi()
+#prep_iod()
 prep_K_index()
 prep_wwv_proxy()
 
@@ -105,7 +107,7 @@ taux.attrs['var_desc'] = 'x-wind-stress'
 taux.attrs['units'] = 'm^2/s^2'
 postprocess(taux)
 
-
+#%%
 # =============================================================================
 # Determine earliest enddate that is in all datasets to be used for training
 # =============================================================================
@@ -118,16 +120,19 @@ from s0_start import start_pred_y, start_pred_m
 oni = pd.read_csv(join(processeddir,'oni.csv'),index_col=0, parse_dates=True)
 wwv = pd.read_csv(join(processeddir,'wwv_proxy.csv'),index_col=0, parse_dates=True)
 dmi = pd.read_csv(join(processeddir,'dmi.csv'),index_col=0, parse_dates=True)
+#iod = pd.read_csv(join(processeddir,'iod.csv'),index_col=0, parse_dates=True)
 taux = xr.open_dataarray(join(processeddir,'taux_NCEP_anom.nc'))
 
 # Enddates of processed data sets
 oni_end = oni.index[-1]
 wwv_end = wwv.index[-1]
 dmi_end = dmi.index[-1]
+#iod_end = iod.index[-1]
 taux_end = pd.Timestamp(taux.time.values[-1])
 
 # Find latest common date of observations
 latest = min(oni_end,wwv_end,dmi_end,taux_end)
+#latest = min(oni_end, wwv_end, iod_end, taux_end)
  
 # Check if end of observations is before start of predictions.
 # If not, take last date before start of prediction as enddate.
@@ -145,7 +150,7 @@ else:
     #endmth = str(current_month)
 
 # Save enddate of observations to be used
-print_header("Saving enddate of observations")
+#print_header("Saving enddate of observations")
 f = open(join(infodir,"enddate.txt"), "x")
 f.write(endyr)
 f.write("\n")

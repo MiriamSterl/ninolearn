@@ -66,10 +66,10 @@ def scaleMax(x):
     return x/np.max(np.abs(x))
 
 
-def month_to_season(month):
+def month_to_season_first(month):
     """
     Translates a month (int between 1 and 12) to a string denoting the 3-month
-    period centered around the given month.
+    period starting at the given month.
     """
     switcher = {1: 'JFM',
                 2: 'FMA',
@@ -84,6 +84,26 @@ def month_to_season(month):
                 11: 'NDJ',
                 12: 'DJF'}
     return switcher[month]
+
+def month_to_season_last(month):
+    """
+    Translates a month (int between 1 and 12) to a string denoting the 3-month
+    period ending at the given month.
+    """
+    switcher = {1: 'NDJ',
+                2: 'DJF',
+                3: 'JFM',
+                4: 'FMA',
+                5: 'MAM',
+                6: 'AMJ',
+                7: 'MJJ',
+                8: 'JJA',
+                9: 'JAS',
+                10: 'ASO',
+                11: 'SON',
+                12: 'OND'}
+    return switcher[month]
+
 
 def num_to_month(num):
     """

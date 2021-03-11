@@ -9,6 +9,7 @@ sys.path.append(basedir)
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from os.path import join
+from pickle import dump
 
 from ninolearn.utils import include_time_lag
 from ninolearn.IO.read_processed import data_reader
@@ -26,6 +27,9 @@ endyr = f.readline()
 endmth = f.readline()
 end_obs_m = int(endmth)
 end_obs_y = int(endyr)
+
+if end_obs_m < 10:
+    endmth = '0'+endmth
 
 if start_pred_y > end_obs_y+1 or (start_pred_y > end_obs_y and start_pred_m > end_obs_m):
     raise ValueError("More than 1 year difference between end of observations and start of predictions.\
@@ -61,6 +65,7 @@ def pipeline(lead_time, return_persistance=False):
     # indices
     oni = reader.read_csv('oni')
     dmi = reader.read_csv('dmi')
+    #iod = reader.read_csv('iod')
     wwv = reader.read_csv('wwv_proxy')
 
     # seasonal cycle
@@ -83,6 +88,7 @@ def pipeline(lead_time, return_persistance=False):
     feature_unscaled = np.stack((oni,
                                  wwv,
                                  dmi,
+                                 #iod,
                                  cos,
                                  taux_WP_mean
                                  ), axis=1)
@@ -94,12 +100,12 @@ def pipeline(lead_time, return_persistance=False):
 
     # set nans to 0.
     Xorg = np.nan_to_num(Xorg)
-    #np.save('Xorg', Xorg) 
+    np.save(join(infodir,'Xorg'), Xorg) 
 
     # arange the feature array
     X = Xorg[:-lead_time-shift,:]
     X = include_time_lag(X, n_lags=n_lags, step=step)
-    np.save(join(infodir,'features'), X)
+    #np.save(join(infodir,'features'), X)
 
     # arange label
     yorg = oni.values
