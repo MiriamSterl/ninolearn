@@ -327,11 +327,11 @@ class sources(object):
               'name': 'Kindex.mat',
               'path': join(basedir,'ninolearn/data/Kindex.mat')
             }
+    
 
     otherForecasts = { # TODO: update filename with MMYY!
             'downloadType':'http',
             'url': 'https://iri.columbia.edu/~forecast/ensofcst/Data/ensofcst_ALLto0221',
-            #'filename': 'other_forecasts.csv'
             'filename': 'other_forecasts.txt'
             }
 
