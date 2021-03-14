@@ -71,10 +71,9 @@ def season_shift_year(season):
 
 def prep_oni():
     """
-    Add a time axis corresponding to the first day of the central month of a
-    3-month season. For example: DJF 2019 becomes 2019-01-01. Further, rename
+    Add a time axis corresponding to the first day of the last month of a
+    3-month season. For example: DJF 2019 becomes 2019-02-01. Further, rename
     some axis.
-    TODO: documentation different; 3monthperiods shifted to last month
     """
     print("Prepare ONI timeseries.")
     data = read_raw.oni()

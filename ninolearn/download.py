@@ -9,6 +9,7 @@ from os.path import isfile, join, exists
 from os import remove, mkdir
 import gzip
 import shutil
+import requests
 
 from ninolearn.pathes import rawdir, basedir
 
@@ -328,10 +329,16 @@ class sources(object):
               'path': join(basedir,'ninolearn/data/Kindex.mat')
             }
     
-
-    otherForecasts = { # TODO: update filename with MMYY!
+    
+    url = "https://iri.columbia.edu/~forecast/ensofcst/Data/"
+    r = requests.get(url)
+    html = r.text
+    name_start = "ensofcst_ALLto"
+    name_start_pos = html.find(name_start)
+    iri_data = url+html[name_start_pos:name_start_pos+(len(name_start)+4)]
+    otherForecasts = {
             'downloadType':'http',
-            'url': 'https://iri.columbia.edu/~forecast/ensofcst/Data/ensofcst_ALLto0221',
+            'url': iri_data,
             'filename': 'other_forecasts.txt'
             }
 
