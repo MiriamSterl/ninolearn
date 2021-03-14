@@ -115,6 +115,7 @@ from ninolearn.preprocess.prepare import prep_other_forecasts
 from s0_start import start_pred_y, start_pred_m
 from ninolearn.utils import num_to_month, pred_filename
 
+# TODO: also save last_obs info in prepare.py
 IRICPC = prep_other_forecasts(num_to_month(start_pred_m),str(start_pred_y))
 fn = pred_filename(start_pred_y, start_pred_m)+'_iricpc.txt'
 np.save(join(preddir,fn), IRICPC)

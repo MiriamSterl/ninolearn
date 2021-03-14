@@ -67,7 +67,7 @@ if obs_month < 10:
 else:
    obs_date = str(obs_year)+'-'+str(obs_month)+'-01 00:00:00' 
    
-obs_index = oni_obs.loc[oni_obs['time']==obs_date].index
+obs_index = oni_obs.loc[oni_obs['time']==obs_date].index # TODO: get last obs from IRI instead
 if len(obs_index)==1:
     last_obs = oni_obs.iloc[obs_index]['anom']
     plt.scatter(lead_times[0]-2,last_obs, color='k', zorder=3)
