@@ -63,12 +63,12 @@ for i in np.arange(len(lead_times)):
 # Take 3-month averages and save predictions
 # =============================================================================
 
-print_header("Computing seasonal averages")
+print_header("Computing seasonal averages") # TODO: nodig? of zijn predictions al voor seasons?
 
 # Moving average with window of 3 months
 pred_seasons_mean = uniform_filter1d(predictions[0,:], size=3)
 pred_seasons_mean = pred_seasons_mean[1:-1]
-pred_seasons_std = uniform_filter1d(predictions[1,:], size=3)
+pred_seasons_std = uniform_filter1d(predictions[1,:], size=3) # TODO: kwadratisch optellen?
 pred_seasons_std = pred_seasons_std[1:-1]
 
 # Translate months to 3-month seasons centered around central month
