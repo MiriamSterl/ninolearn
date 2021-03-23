@@ -124,6 +124,20 @@ def num_to_month(num):
                 12: 'Dec'}
     return switcher[num]
 
+def month_to_num(month):
+    switcher = {'Jan': 1,
+                'Feb': 2,
+                'Mar': 3,
+                'Apr': 4,
+                'May': 5,
+                'Jun': 6,
+                'Jul': 7,
+                'Aug': 8,
+                'Sep': 9,
+                'Oct': 10,
+                'Nov': 11,
+                'Dec': 12}
+    return switcher[month]
 
 def pred_filename(year, month):
     if month < 10:
