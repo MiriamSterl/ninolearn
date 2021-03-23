@@ -155,12 +155,12 @@ else:
         endmth = str(12)
 
 # Save enddate of observations to be used
-print_header("Saving enddate of observations")
 f = open(join(infodir,"enddate.txt"), "x")
 f.write(endyr)
 f.write("\n")
 f.write(endmth)
 f.close()
+print("Enddate of observations saved")
 
 
 print("Step 1 finished, continue to step 2!")
