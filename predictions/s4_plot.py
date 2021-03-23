@@ -62,6 +62,7 @@ if plot_iricpc: # IRI/CPC data available
     last_obs_month = float(IRICPC[1][3:])
     plt.scatter(lead_times[0]-2,last_obs_month, color='k', zorder=3)
     plt.plot([lead_times[0]-3, lead_times[0]-2], [last_obs_seas,last_obs_month], 'k')
+    plt.plot([lead_times[0]-2, lead_times[0]], [last_obs_month,mean[0]], ':k', alpha=0.5)
     
     # Plot IRI/CPC forecasts
     for i in range(2,np.size(IRICPC,0)):
