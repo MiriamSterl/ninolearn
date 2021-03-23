@@ -256,10 +256,24 @@ def prep_other_forecasts(month,year):
             go = False
             f.readline() # first/last month info
             last_obs = f.readline() # last obs info
-            last_obs_season = last_obs[18:26] # last season observation
-            last_obs_month = last_obs[27:35] # last month observation
-            IRICPC.append(last_obs_season)
+            last_obs_info = last_obs[16:].strip()
+            last_obs_seas = last_obs_info[0:8]
+            last_obs_month = last_obs_info[8:].strip()
+            # last_obs_seas_label = last_obs_info[0:3]
+            # if last_obs_info[3] == '-':
+            #     last_obs_seas = float(last_obs_info[3:8])
+            # else:
+            #     last_obs_seas = float(last_obs_info[4:8])
+            # last_obs_info2 = last_obs_info[8:].strip()
+            # last_obs_month_label = last_obs_info2[0:3]
+            # if last_obs_info2[3] == '-':
+            #     last_obs_month = float(last_obs_info2[3:])
+            # else:
+            #     last_obs_month = float(last_obs_info2[4:])
+            #IRICPC.append(last_obs_seas_label)
+            IRICPC.append(last_obs_seas)
             IRICPC.append(last_obs_month)
+            #IRICPC.append(last_obs_month)
             read_forecast = True
             while read_forecast:
                 line = f.readline()
@@ -276,6 +290,5 @@ def prep_other_forecasts(month,year):
             print('IRI/CPC forecast not found for desired period')
             break
     f.close()
-    #np.save(join(processeddir,'IRICPC'), IRICPC)
     return IRICPC
 
