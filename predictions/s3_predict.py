@@ -60,26 +60,19 @@ for i in np.arange(len(lead_times)):
 
 
 # =============================================================================
-# Take 3-month averages and save predictions
+# Save predictions
 # =============================================================================
 
-print_header("Computing seasonal averages") # TODO: nodig? of zijn predictions al voor seasons?
-
-# Moving average with window of 3 months
-pred_seasons_mean = uniform_filter1d(predictions[0,:], size=3)
-pred_seasons_mean = pred_seasons_mean[1:-1]
-pred_seasons_std = uniform_filter1d(predictions[1,:], size=3) # TODO: kwadratisch optellen?
-pred_seasons_std = pred_seasons_std[1:-1]
-
 # Translate months to 3-month seasons centered around central month
-seasons = np.empty(len(pred_seasons_mean), dtype=object)
-for i in np.arange(len(pred_seasons_mean)):
+seasons = np.empty(len(predictions[0,:]), dtype=object)
+for i in np.arange(len(predictions[0,:])):
     seasons[i] = month_to_season_first(start_pred_m+i)
 np.save(join(infodir,'seasons'), seasons)
 
 # Save predictions as DataFrame
-df = pd.DataFrame({'Mean': pred_seasons_mean, 'STD': pred_seasons_std}, index = seasons)
+df = pd.DataFrame({'Mean': predictions[0,:], 'STD': predictions[1,:]}, index = seasons)
 df.index.name = 'Season'
+
 fn = pred_filename(start_pred_y, start_pred_m)+'_ninolearn.csv'
 df.to_csv(join(preddir,fn))
 
