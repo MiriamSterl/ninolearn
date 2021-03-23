@@ -18,7 +18,7 @@ from s0_start import start_pred_y, start_pred_m
 # Loading the predictions
 # =============================================================================
 
-lead_times = np.load(join(infodir,'lead_times.npy'))[:-2]
+lead_times = np.load(join(infodir,'lead_times.npy'))
 fn = pred_filename(start_pred_y, start_pred_m)
 predictions = pd.read_csv(join(preddir,fn+'_ninolearn.csv'), index_col=0)
 seasons = predictions.index.values
