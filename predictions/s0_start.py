@@ -12,8 +12,7 @@ Do not commit this file to your public repository!
 basedir = "" # full path to the root directory of the ninolearn folder
 datadir = "" # full path to the directory where you want to save data
 
-# the month (1-12) and year where you want the prediction to start, as int
-# if you want to make a new prediction, fill in the current month and year.
+# the month (1-12) and year where you want to start a 9-month prediction, as int
 start_pred_m = 
 start_pred_y = 
 
