@@ -246,6 +246,7 @@ def prep_other_forecasts(month,year):
     """
     Extract IRI/CPC forecast for desired period
     """
+    print("Prepare IRI/CPC forecast data.")
     IRICPC = []
     f = open(join(rawdir,"other_forecasts.txt"), "r")
     go = True
@@ -254,7 +255,11 @@ def prep_other_forecasts(month,year):
         if line == 'Forecast issued '+month+' '+year+'\n':
             go = False
             f.readline() # first/last month info
-            f.readline() # last obs info
+            last_obs = f.readline() # last obs info
+            last_obs_season = last_obs[18:26] # last season observation
+            last_obs_month = last_obs[27:35] # last month observation
+            IRICPC.append(last_obs_season)
+            IRICPC.append(last_obs_month)
             read_forecast = True
             while read_forecast:
                 line = f.readline()
