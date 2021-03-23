@@ -74,7 +74,7 @@ if plot_iricpc: # IRI/CPC data available
     ticklabels=np.hstack((last_obs_seas_label,last_obs_month_label,mid_seas_label,seasons))
     
     plt.xlim(lead_times[0]-3, lead_times[-1])
-    plt.xticks(np.arange(lead_times[0]-3,lead_times[-1]+1), ticklabels, fontsize=10)
+    #plt.xticks(np.arange(lead_times[0]-3,lead_times[-1]+1), ticklabels, fontsize=10)
     plt.plot(np.arange(lead_times[0]-3,lead_times[-1]+1), np.zeros(len(lead_times)+3),'k')
     plt.text(lead_times[0]-2.9,plt.gca().get_ylim()[0]+0.1,"OBSERVED",fontsize=10,fontfamily='serif')
     plt.text(lead_times[0]+0.1,plt.gca().get_ylim()[0]+0.1,"FORECAST",fontsize=10,fontfamily='serif')
@@ -117,8 +117,8 @@ else: # no IRI/CPC data
         plt.plot(lead_times, np.zeros(len(lead_times)),'k')
 
 
-plt.savefig(join(preddir,fn+'.png'))
-plt.savefig(join(preddir,fn+'.pdf'))
+#plt.savefig(join(preddir,fn+'.png'))
+#plt.savefig(join(preddir,fn+'.pdf'))
 
 
 print("Step 4 finished, continue to step 5!")
