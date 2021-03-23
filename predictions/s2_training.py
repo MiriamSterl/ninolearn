@@ -25,6 +25,7 @@ from s0_start import start_pred_y, start_pred_m
 f = open(join(infodir,"enddate.txt"), "r")
 endyr = f.readline()
 endmth = f.readline()
+f.close()
 end_obs_m = int(endmth)
 end_obs_y = int(endyr)
 
