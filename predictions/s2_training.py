@@ -36,7 +36,7 @@ if start_pred_y > end_obs_y+1 or (start_pred_y > end_obs_y and start_pred_m > en
           Either include more observations or let the predictions start earlier.")
 
 lt_first = (start_pred_m - end_obs_m)%12 - 1 
-lead_times = np.arange(lt_first,lt_first+11)
+lead_times = np.arange(lt_first,lt_first+8) # prediction for 9 seasons
 np.save(join(infodir,'lead_times'), lead_times)
 
 
