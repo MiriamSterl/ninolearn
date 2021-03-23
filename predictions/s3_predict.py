@@ -66,7 +66,10 @@ for i in np.arange(len(lead_times)):
 # Translate months to 3-month seasons centered around central month
 seasons = np.empty(len(predictions[0,:]), dtype=object)
 for i in np.arange(len(predictions[0,:])):
-    seasons[i] = month_to_season_first(start_pred_m+i)
+    if start_pred_m+i<13:
+        seasons[i] = month_to_season_first(start_pred_m+i)
+    else:
+        seasons[i] = month_to_season_first((start_pred_m+i)%12)
 np.save(join(infodir,'seasons'), seasons)
 
 # Save predictions as DataFrame
