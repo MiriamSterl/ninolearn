@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from os.path import join
-from ninolearn.pathes import infodir, preddir, processeddir
+from ninolearn.pathes import preddir, processeddir
 from ninolearn.utils import num_to_month, month_to_num, month_to_season_first, month_to_season_last, pred_filename
 from s0_start import start_pred_y, start_pred_m
 
@@ -18,7 +18,7 @@ from s0_start import start_pred_y, start_pred_m
 # Loading the predictions
 # =============================================================================
 
-lead_times = np.load(join(infodir,'lead_times.npy'))
+lead_times = np.arange(0,9)
 fn = pred_filename(start_pred_y, start_pred_m)
 predictions = pd.read_csv(join(preddir,fn+'_ninolearn.csv'), index_col=0)
 seasons = predictions.index.values
@@ -38,8 +38,13 @@ if len(IRICPC)>0:
 # =============================================================================
 
 plt.figure(figsize=(8,5))
+# plot observations
+obs = np.load(join(preddir,fn+'_obs.npy'))
+plt.plot(lead_times, obs, 'ok', label='Observations')
+plt.plot(lead_times, obs, 'k')
+# plot NinoLearn prediction
 plt.plot(lead_times,mean, 'b')
-plt.plot(lead_times,mean, 'ob', zorder=3)
+plt.plot(lead_times,mean, 'ob', zorder=3, label = 'NinoLearn Predictions')
 plt.plot(lead_times, std_upper, '--b')
 plt.plot(lead_times, std_lower, '--b')
 plt.fill_between(lead_times, std_lower, std_upper, facecolor='b', alpha=0.2)
@@ -67,7 +72,10 @@ if plot_iricpc: # IRI/CPC data available
     # Plot IRI/CPC forecasts
     for i in range(2,np.size(IRICPC,0)):
         plt.plot(lead_times, IRICPC[i], color='grey', alpha=0.5)
-        plt.plot(lead_times, IRICPC[i], 'o', color='grey', alpha=0.5)
+        if i==2:
+            plt.plot(lead_times, IRICPC[i], 'o', color='grey', alpha=0.5, label= 'IRI/CPC Predictions')
+        else:
+            plt.plot(lead_times, IRICPC[i], 'o', color='grey', alpha=0.5)
         plt.plot([lead_times[0]-2, lead_times[0]], [last_obs_month,IRICPC[i][0]], ':k', alpha=0.5)
     
     mid_seas = month_to_num(last_obs_month_label)
@@ -117,7 +125,7 @@ else: # no IRI/CPC data
         plt.xticks(lead_times, seasons, fontsize=10)
         plt.plot(lead_times, np.zeros(len(lead_times)),'k')
 
-
+plt.legend()
 plt.savefig(join(preddir,fn+'.png'))
 plt.savefig(join(preddir,fn+'.pdf'))
 

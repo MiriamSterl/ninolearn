@@ -59,7 +59,6 @@ download(sources.VWIND_NCEP)
 download(sources.otherForecasts)
 
 
-
 # =============================================================================
 # Prepare the indices
 # =============================================================================
@@ -107,7 +106,7 @@ taux.attrs['var_desc'] = 'x-wind-stress'
 taux.attrs['units'] = 'm^2/s^2'
 postprocess(taux)
 
-#%%
+
 # =============================================================================
 # Prepare the IRI/CPC forecast data
 # =============================================================================
@@ -115,11 +114,35 @@ from ninolearn.preprocess.prepare import prep_other_forecasts
 from s0_start import start_pred_y, start_pred_m
 from ninolearn.utils import num_to_month, pred_filename
 
-IRICPC = prep_other_forecasts(num_to_month(start_pred_m),str(start_pred_y))
 fn = pred_filename(start_pred_y, start_pred_m)
+IRICPC = prep_other_forecasts(num_to_month(start_pred_m),str(start_pred_y))
 np.save(join(preddir,fn+'_iricpc.npy'), IRICPC)
 
-#%%
+
+# =============================================================================
+# Check if there are observations for the desired period available in the ONI dataset.
+# If yes, they can be saved and plotted together with the predictions later.
+# =============================================================================
+import pandas as pd
+from ninolearn.utils import month_to_season_first
+
+oni_obs = pd.read_csv(join(processeddir, 'oni.csv'))
+values = np.empty(9)
+values[:] = np.nan
+
+start_seas = month_to_season_first(start_pred_m)
+obs_season = oni_obs[oni_obs['SEAS']==start_seas] 
+obs_index = obs_season[obs_season['YR']==start_pred_y].index
+if len(obs_index) > 0:
+    start_index = obs_index[0]
+    i=0
+    while start_index+i < oni_obs.index[-1] + 1 and i < 9:
+        values[i] = oni_obs.iloc[start_index+i]['anom']
+        i += 1
+np.save(join(preddir,fn+'_obs.npy'), values)
+
+
+
 # =============================================================================
 # Determine earliest enddate that is in all datasets to be used for training
 # =============================================================================
