@@ -40,8 +40,8 @@ if len(IRICPC)>0:
 plt.figure(figsize=(8,5))
 # plot observations
 obs = np.load(join(preddir,fn+'_obs.npy'))
-plt.plot(lead_times, obs, 'ok', label='Observations')
-plt.plot(lead_times, obs, 'k')
+plt.plot(lead_times, obs, 'ok', label='Observations',zorder=3)
+plt.plot(lead_times, obs, 'k',zorder=3)
 # plot NinoLearn prediction
 plt.plot(lead_times,mean, 'b')
 plt.plot(lead_times,mean, 'ob', zorder=3, label = 'NinoLearn Predictions')
@@ -68,6 +68,7 @@ if plot_iricpc: # IRI/CPC data available
     plt.scatter(lead_times[0]-2,last_obs_month, color='k', zorder=3)
     plt.plot([lead_times[0]-3, lead_times[0]-2], [last_obs_seas,last_obs_month], 'k')
     plt.plot([lead_times[0]-2, lead_times[0]], [last_obs_month,mean[0]], ':k', alpha=0.5)
+    plt.plot([lead_times[0]-2, lead_times[0]], [last_obs_month,obs[0]], ':k', alpha=0.5)
     
     # Plot IRI/CPC forecasts
     for i in range(2,np.size(IRICPC,0)):
@@ -106,6 +107,7 @@ else: # no IRI/CPC data
         last_obs = oni_obs.iloc[obs_index]['anom']
         plt.scatter(lead_times[0]-3,last_obs, color='k', zorder=3)
         plt.plot([lead_times[0]-3, lead_times[0]], [last_obs, mean[0]], ':k')
+        plt.plot([lead_times[0]-3, lead_times[0]], [last_obs, obs[0]], ':k')
         plt.xlim(lead_times[0]-3,lead_times[-1])
         tick1 = month_to_season_last(obs_month)
         if obs_month < 12:
