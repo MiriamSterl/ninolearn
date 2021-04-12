@@ -88,7 +88,6 @@ def pipeline(lead_time, return_persistance=False):
     feature_unscaled = np.stack((oni,
                                  wwv,
                                  dmi,
-                                 #iod,
                                  cos,
                                  taux_WP_mean
                                  ), axis=1)
@@ -105,7 +104,6 @@ def pipeline(lead_time, return_persistance=False):
     # arange the feature array
     X = Xorg[:-lead_time-shift,:]
     X = include_time_lag(X, n_lags=n_lags, step=step)
-    #np.save(join(infodir,'features'), X)
 
     # arange label
     yorg = oni.values

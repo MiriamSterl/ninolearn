@@ -8,7 +8,7 @@ sys.path.append(basedir)
 
 import numpy as np
 import pandas as pd
-from scipy.ndimage.filters import uniform_filter1d
+#from scipy.ndimage.filters import uniform_filter1d
 from os.path import join
 #from pickle import load
 
@@ -25,7 +25,6 @@ from s0_start import start_pred_y, start_pred_m
 # =============================================================================
 
 #scalerX = load(open('scalerX.pkl', 'rb'))
-#X = np.load(join(infodir,'features.npy'))
 Xorg = np.load(join(infodir,'Xorg.npy'))
 # include values of 3 and 6 months previously
 n_lags = 3
