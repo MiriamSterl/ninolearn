@@ -8,9 +8,7 @@ sys.path.append(basedir)
 
 import numpy as np
 import pandas as pd
-#from scipy.ndimage.filters import uniform_filter1d
 from os.path import join
-#from pickle import load
 
 from ninolearn.utils import month_to_season_first, print_header, include_time_lag, pred_filename
 from ninolearn.pathes import modeldir, infodir, preddir
@@ -24,7 +22,6 @@ from s0_start import start_pred_y, start_pred_m
 # Getting feature vector
 # =============================================================================
 
-#scalerX = load(open('scalerX.pkl', 'rb'))
 Xorg = np.load(join(infodir,'Xorg.npy'))
 # include values of 3 and 6 months previously
 n_lags = 3

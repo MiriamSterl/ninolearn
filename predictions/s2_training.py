@@ -9,7 +9,6 @@ sys.path.append(basedir)
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from os.path import join
-#from pickle import dump
 
 from ninolearn.utils import include_time_lag
 from ninolearn.IO.read_processed import data_reader
@@ -95,7 +94,6 @@ def pipeline(lead_time, return_persistance=False):
     # scale each feature
     scalerX = StandardScaler()
     Xorg = scalerX.fit_transform(feature_unscaled)
-    #dump(scalerX, open(join(infodir,'scalerX.pkl'), 'wb'))
 
     # set nans to 0.
     Xorg = np.nan_to_num(Xorg)
