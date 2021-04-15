@@ -258,8 +258,12 @@ def prep_other_forecasts(month,year):
             last_obs = f.readline() # last obs info
             last_obs_info = last_obs[16:].strip()
             last_obs_info = last_obs_info.replace(" ","")
-            last_obs_seas = last_obs_info[0:8]
-            last_obs_month = last_obs_info[8:]
+            if last_obs_info[3] == '-':
+                last_obs_seas = last_obs_info[0:8]
+                last_obs_month = last_obs_info[8:]
+            else:
+                last_obs_seas = last_obs_info[0:7]
+                last_obs_month = last_obs_info[7:]
             IRICPC.append(last_obs_seas)
             IRICPC.append(last_obs_month)
             read_forecast = True
